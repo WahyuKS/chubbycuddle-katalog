@@ -361,7 +361,21 @@
             info.textContent = `Showing ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} products`;
             
             // Render Update Pagination Buttons
-            document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            const pageNumbersContainer = document.getElementById('page-numbers');
+            if (pageNumbersContainer) {
+                pageNumbersContainer.innerHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    btn.textContent = i;
+                    btn.onclick = () => {
+                        currentPage = i;
+                        filterAndSortProducts();
+                        document.getElementById('catalog').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    };
+                    pageNumbersContainer.appendChild(btn);
+                }
+            }
             document.getElementById('btn-page-prev').disabled = currentPage === 1;
             document.getElementById('btn-page-next').disabled = currentPage === totalPages;
 
