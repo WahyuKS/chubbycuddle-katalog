@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChubbyCuddle - Everything Your Sugar Glider Needs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container header-content">
+            <div class="logo-container">
+                <img src="" alt="ChubbyCuddle Logo" class="logo-img" id="header-logo">
+                <div class="brand-text">
+                    <h1 id="header-brand-name">ChubbyCuddle</h1>
+                    <p id="header-tagline">Everything Your Sugar Glider Needs</p>
+                </div>
+            </div>
+            <nav class="nav-links" id="nav-links">
+                <a href="#hero">Beranda</a>
+                <a href="#catalog">Katalog</a>
+                <a href="#categories">Kategori</a>
+                <a href="#wa-cta">Hubungi Kami</a>
+            </nav>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="container hero-section" id="hero">
+            <div class="carousel-container" id="carousel">
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Slides inserted via JS -->
+                </div>
+                <button class="carousel-btn carousel-prev" id="btn-prev">&#10094;</button>
+                <button class="carousel-btn carousel-next" id="btn-next">&#10095;</button>
+                <div class="carousel-dots" id="carousel-dots">
+                    <!-- Dots inserted via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- WHATSAPP CTA -->
+        <section class="container wa-cta" id="wa-cta">
+            <div class="wa-card">
+                <div class="wa-info">
+                    <div class="wa-icon">&#9993;</div>
+                    <div class="wa-text">
+                        <h3>Need Help Choosing the Right Products?</h3>
+                        <p>We're happy to help you find the right essentials for your sugar glider.</p>
+                    </div>
+                </div>
+                <a href="#" class="btn-whatsapp" id="wa-cta-btn" target="_blank">
+                    &#9993; Chat with Us
+                </a>
+            </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section class="container" id="categories" style="padding-top: 2rem;">
+            <div class="section-header">
+                <h2>Shop by Category</h2>
+                <p>Find exactly what your little companion needs</p>
+            </div>
+            <div class="categories-grid" id="categories-grid">
+                <!-- Categories inserted via JS -->
+            </div>
+        </section>
+
+        <!-- CATALOG -->
+        <section class="container" id="catalog" style="padding-top: 2rem;">
+            <div class="section-header">
+                <h2>Shop ChubbyCuddle</h2>
+                <p>Browse our complete collection of premium essentials</p>
+            </div>
+            
+            <div class="catalog-controls">
+                <div class="catalog-info" id="catalog-info">
+                    Showing 0 products
+                </div>
+                <div class="catalog-actions">
+                    <div class="search-box">
+                        <span class="search-icon">&#128269;</span>
+                        <input type="text" id="search-input" placeholder="Search products...">
+                    </div>
+                    <select id="sort-select">
+                        <option value="default">Default Sorting</option>
+                        <option value="az">Name A - Z</option>
+                        <option value="za">Name Z - A</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-grid" id="products-grid">
+                <!-- Products inserted via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <h3>No products found</h3>
+                <p>Try adjusting your search or category filter.</p>
+                <button class="btn-primary" style="margin-top: 1rem;" id="btn-clear-filters">Clear Filters</button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <button class="page-btn" id="btn-page-prev">&#10094;</button>
+                <span class="page-info" id="page-info">Page 1 of 1</span>
+                <button class="page-btn" id="btn-page-next">&#10095;</button>
+                
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="" alt="ChubbyCuddle Logo" class="logo-img" id="footer-logo">
+                    <h3 id="footer-brand-name" style="margin-bottom: 0.5rem;">ChubbyCuddle</h3>
+                    <p id="footer-tagline">Everything Your Sugar Glider Needs</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <ul id="footer-categories">
+                        <!-- Footer categories inserted via JS -->
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#hero">Beranda</a></li>
+                        <li><a href="#catalog">Katalog</a></li>
+                        <li><a href="#categories">Kategori</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="#" id="footer-wa-link" target="_blank">WhatsApp Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; <span id="copyright-year"></span> ChubbyCuddle. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- PRODUCT MODAL -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content" id="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-img">
+                <img src="" alt="Product Image" id="modal-image">
+            </div>
+            <div class="modal-details">
+                <div class="modal-category" id="modal-category">Category</div>
+                <h3 class="modal-title" id="modal-title">Product Name</h3>
+                <div class="modal-desc" id="modal-desc">Product full description goes here.</div>
+                <a href="#" class="btn-whatsapp" id="modal-wa-btn" target="_blank" style="justify-content: center; width: 100%;">
+                    &#9993; Ask About This Product
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN SCRIPT -->
+    <script src="script.js"></script>
+</body>
+</html>
