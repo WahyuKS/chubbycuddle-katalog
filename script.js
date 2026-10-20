@@ -6,7 +6,7 @@
         const config = {
             brandName: "ChubbyCuddle",
             tagline: "Segala Kebutuhan Sugar Glider Anda",
-            logoUrl: "assets/logo.jpg", // Ganti dengan URL/Path logo asli
+            logoUrl: "assets/Logo.jpg", // Ganti dengan URL/Path logo asli
             whatsappNumber: "6281234567890", // Format: 62 tanpa spasi/plus
             
             slides: [
