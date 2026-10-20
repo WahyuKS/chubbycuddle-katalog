@@ -5,8 +5,8 @@
          */
         const config = {
             brandName: "ChubbyCuddle",
-            tagline: "Everything Your Sugar Glider Needs",
-            logoUrl: "https://ui-avatars.com/api/?name=CC&background=2563EB&color=fff&rounded=true&size=150", // Ganti dengan URL/Path logo asli
+            tagline: "Segala Kebutuhan Sugar Glider Anda",
+            logoUrl: "assets/logo.jpg", // Ganti dengan URL/Path logo asli
             whatsappNumber: "6281234567890", // Format: 62 tanpa spasi/plus
             
             slides: [
@@ -57,8 +57,8 @@
             ],
             
             products: [
-                { name: "Ceramic Food Bowl", description: "Heavy duty ceramic bowl that prevents tipping. Perfect for daily feeding.", category: "Feeding Supplies", image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=400&q=80" },
-                { name: "Glass Water Bottle", description: "Drip-proof water bottle with stainless steel nozzle.", category: "Feeding Supplies", image: "https://images.unsplash.com/photo-1522069169874-c58ec4b76be1?auto=format&fit=crop&w=400&q=80" },
+                { name: "Spet Sugar Glider", description: "Spet ini memiliki ujung corong halus yang pas di mulut mungil hewan seperti sugar glider atau hewan kecil lainnya, memungkinkan kontrol aliran cairan secara presisi agar hewan tidak mudah tersedak. Produk ini sudah termasuk sikat mini untuk membersihkan sisa endapan susu di bagian dalam corong yang sempit yang tidak dapat digapai oleh sikat biasa. Terdapat skala ukur untuk memudahkan porsi asupan yang dibutuhkan anabul.", category: "Feeding Supplies", image: "assets/CC120001.jpg" },
+                { name: "Pet Cargo Paw Pastel Kotak", description: "Pet cargo praktis untuk perjalanan anabul yang aman dan nyaman! Dilengkapi tutup transparan untuk memantau anabul, ventilasi udara, alas plastik agar tetap bersih dan kering, serta botol minum mini 60 ml. Memiliki pegangan nyaman dan kunci bermotif paw yang lucu. \n\n 📏 Ukuran: 18,4 × 16,3 × 17 cm \n 🎨 Warna: Biru, Cokelat, Hijau, Pink, dan Ungu \n\n Cocok untuk perjalanan singkat bersama anabul kesayangan! 🐶🐱💕", category: "Feeding Supplies", image: "assets/CC120002 - Blue.jpg" },
                 { name: "Breathable Travel Carrier", description: "Comfortable and secure mesh carrier for safe travels.", category: "Travel and carrier", image: "https://images.unsplash.com/photo-1548249081-649f1833503a?auto=format&fit=crop&w=400&q=80" },
                 { name: "Bonding Pouch Sling", description: "Soft fleece sling to carry your glider comfortably while bonding.", category: "Travel and carrier", image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=400&q=80" },
                 { name: "Premium Glider Diet Mix", description: "Complete nutrition mix specially formulated for adult sugar gliders.", category: "food and nutrition", image: "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=400&q=80" },
@@ -240,7 +240,7 @@
             grid.innerHTML = `
                 <div class="category-card active" id="cat-card-All" onclick="setActiveCategory('All')">
                     <div class="category-icon">&#128062;</div>
-                    <h3>All Products</h3>
+                    <h3>Semua Produk</h3>
                 </div>
             `;
             
@@ -341,7 +341,7 @@
                 grid.style.display = 'none';
                 pagination.style.display = 'none';
                 emptyState.style.display = 'block';
-                info.textContent = 'Showing 0 products';
+                info.textContent = 'Lihat 0 products';
                 return;
             }
             
@@ -358,7 +358,7 @@
             const paginatedItems = filteredProducts.slice(startIndex, endIndex);
 
             // Render Info
-            info.textContent = `Showing ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} products`;
+            info.textContent = `Lihat ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} products`;
             
             // Render Update Pagination Buttons
             const pageNumbersContainer = document.getElementById('page-numbers');
@@ -393,7 +393,7 @@
                         <div class="product-category">${product.category}</div>
                         <h3 class="product-name">${product.name}</h3>
                         <p class="product-desc">${product.description.substring(0, 60)}${product.description.length > 60 ? '...' : ''}</p>
-                        <button class="btn-outline" onclick="openModal(${config.products.indexOf(product)})">View Details</button>
+                        <button class="btn-outline" onclick="openModal(${config.products.indexOf(product)})">Lihat Detail</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -413,7 +413,7 @@
             document.getElementById('modal-image').src = product.image;
             document.getElementById('modal-category').textContent = product.category;
             document.getElementById('modal-title').textContent = product.name;
-            document.getElementById('modal-desc').textContent = product.description;
+            document.getElementById('modal-desc').innerHTML = product.description.replace(/\n/g, '<br>');
             
             const waMsg = `Hi ChubbyCuddle! I would like to know more about ${product.name}.`;
             document.getElementById('modal-wa-btn').href = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(waMsg)}`;
