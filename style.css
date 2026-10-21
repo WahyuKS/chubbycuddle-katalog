@@ -692,6 +692,7 @@
         }
 
         .modal-img {
+    position: relative;
     width: 100%;
     background-color: var(--light-blue);
     aspect-ratio: 4/3;
