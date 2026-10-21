@@ -5,45 +5,45 @@
  */
 const config = {
     brandName: "ChubbyCuddle",
-    tagline: "Segala Kebutuhan Sugar Glider Anda",
+    tagline: "Lengkapi Kebutuhan Sugar Glider Kesayanganmu",
     logoUrl: "assets/Logo.jpg", // Ganti dengan URL/Path logo asli
     whatsappNumber: "6281510973383", // Format: 62 tanpa spasi/plus
     
     slides: [
         {
-            title: "Everything Your Sugar Glider Needs",
-            desc: "Discover thoughtfully selected essentials for your little companion, all in one place.",
-            btnText: "Explore Collection",
+            title: "Perlengkapan & Aksesori Terbaik Sugar Glider",
+            desc: "Dari tempat tidur hangat, pet cargo, hingga alat makan praktis. Temukan semua peralatan untuk kebahagiaan si kecil di sini.",
+            btnText: "Mulai Belanja",
             actionTarget: "#catalog",
-            image: "https://images.unsplash.com/photo-1548249081-649f1833503a?auto=format&fit=crop&w=1200&q=80" 
+            image: "assets/banner1.jpg" 
         },
         {
-            title: "Make Every Feeding Special",
-            desc: "Explore feeding essentials designed to make daily care easier and more enjoyable.",
-            btnText: "Explore Feeding",
-            actionTarget: "cat-Feeding Supplies",
-            image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=1200&q=80" 
-        },
-        {
-            title: "Little Adventures, Big Comfort",
-            desc: "Discover travel carriers and accessories for your sugar glider’s adventures.",
-            btnText: "Explore Travel Gear",
+            title: "Jalan-Jalan Aman & Tampil Gaya",
+            desc: "Bawa anabul bepergian dengan nyaman. Temukan koleksi Pet Cargo pastel dan Bonding Pouch andalan kami!",
+            btnText: "Lihat Travel Gear",
             actionTarget: "cat-Travel and carrier",
-            image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=80" 
+            image: "assets/banner2.jpg" 
         },
         {
-            title: "Good Nutrition, Happy Companions",
-            desc: "Browse food and nutrition essentials for your sugar glider’s daily needs.",
-            btnText: "Explore Nutrition",
-            actionTarget: "cat-food and nutrition",
-            image: "https://images.unsplash.com/photo-1522069169874-c58ec4b76be1?auto=format&fit=crop&w=1200&q=80" 
+            title: "Peralatan Makan & Minum Praktis",
+            desc: "Bikin waktu makan lebih mudah dengan spet corong halus, mangkuk keramik anti-tumpah, dan botol minum berkualitas.",
+            btnText: "Cek Alat Makan",
+            actionTarget: "cat-Feeding Supplies",
+            image: "assets/banner3.jpg" 
         },
         {
-            title: "A Little More Joy Every Day",
-            desc: "Find toys, grooming essentials, cozy accessories, and more for your little friend.",
-            btnText: "Discover More",
-            actionTarget: "#catalog",
-            image: "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=1200&q=80" 
+            title: "Tempat Istirahat Paling Nyaman",
+            desc: "Temukan tempat tidur hangat dan nyaman untuk sugar glider Anda.",
+            btnText: "Lihat Tempat Tidur",
+            actionTarget: "cat-Housing and cleaning",
+            image: "/assets/banner4.jpg" 
+        },
+        {
+            title: "Aktif Bermain & Terawat Rapi",
+            desc: "Jaga si kecil tetap lincah dan bersih dengan mainan panjat interaktif dan perlengkapan gunting kuku yang aman.",
+            btnText: "Eksplor Peralatan",
+            actionTarget: "cat-Grooming and toys",
+            image: "assets/banner5.jpg" 
         }
     ],
     
