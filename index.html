@@ -63,12 +63,12 @@
         <section class="container" id="catalog" style="padding-top: 2rem;">
             <div class="section-header">
                 <h2>Belanja di ChubbyCuddle</h2>
-                <p>Jelajahi koleksi lengkap kebutuhan pokok premium kami</p>
+                <p>Jelajahi koleksi lengkap kami dari essential premium</p>
             </div>
             
             <div class="catalog-controls">
                 <div class="catalog-info" id="catalog-info">
-                    Lihat 0 products
+                    Showing 0 products
                 </div>
                 <div class="catalog-actions">
                     <div class="search-box">
@@ -76,7 +76,7 @@
                         <input type="text" id="search-input" placeholder="Search products...">
                     </div>
                     <select id="sort-select">
-                        <option value="default">Default Sorting</option>
+                        <option value="default">Urutan Default</option>
                         <option value="az">Name A - Z</option>
                         <option value="za">Name Z - A</option>
                     </select>
@@ -89,8 +89,8 @@
 
             <!-- Empty State -->
             <div class="empty-state" id="empty-state" style="display: none;">
-                <h3>No products found</h3>
-                <p>Try adjusting your search or category filter.</p>
+                <h3>Tidak ada produk yang ditemukan</h3>
+                <p>Coba sesuaikan pencarian atau filter kategori Anda.</p>
                 <button class="btn-primary" style="margin-top: 1rem;" id="btn-clear-filters">Clear Filters</button>
             </div>
 
@@ -102,23 +102,80 @@
                 
             </div>
         </section>
-    </main>
+    
 
-    <!-- WHATSAPP CTA -->
+        
+        <!-- TESTIMONIALS -->
+        <section class="container" id="testimonials" style="padding-top: 2rem; margin-bottom: 4rem;">
+            <div class="section-header">
+                <h2>Apa Kata Pawparents?</h2>
+                <p>Ulasan dari pelanggan setia ChubbyCuddle</p>
+            </div>
+            
+            <div class="promo-banner">
+                <span class="promo-icon">🎉</span>
+                <div class="promo-text">
+                    <h3>Special Offer!</h3>
+                    <p>Gratis Ongkir + Bayar di Tempat (COD).Barang sampai dulu, baru bayar. Tanpa risiko! 🐾</p>
+                </div>
+            </div>
+
+            <div class="testimonial-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testi-text">"Kualitas barangnya bagus banget! Sugar gliderku suka banget tidur di pouchnya. Bahannya beneran tebal dan hangat."</p>
+                    <div class="testi-user">
+                        <img src="https://ui-avatars.com/api/?name=Sarah&background=2563EB&color=fff" alt="User">
+                        <div class="user-info">
+                            <h4>Kak Sarah</h4>
+                            <span>Pembeli ChubbyCuddle</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testi-text">"Pet cargonya aman dan warnanya pastel lucu. Pengiriman juga cepat sampai dengan selamat. Bakal langganan terus!"</p>
+                    <div class="testi-user">
+                        <img src="https://ui-avatars.com/api/?name=Dina&background=25D366&color=fff" alt="User">
+                        <div class="user-info">
+                            <h4>Kak Dina</h4>
+                            <span>Pembeli ChubbyCuddle</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testi-text">"Suka banget sama mainannya, anabul jadi aktif terus di kandang. Harganya juga sangat terjangkau."</p>
+                    <div class="testi-user">
+                        <img src="https://ui-avatars.com/api/?name=Reza&background=F59E0B&color=fff" alt="User">
+                        <div class="user-info">
+                            <h4>Kak Reza</h4>
+                            <span>Pembeli ChubbyCuddle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHATSAPP CTA -->
         <section class="container wa-cta" id="wa-cta">
             <div class="wa-card">
                 <div class="wa-info">
                     <div class="wa-icon">&#9993;</div>
                     <div class="wa-text">
-                        <h3>Butuh Bantuan Memilih Produk yang Tepat?</h3>
-                        <p>Kami dengan senang hati membantu Anda menemukan perlengkapan yang tepat untuk sugar glider Anda</p>
+                        <h3>Perlu Bantuan Memilih Produk yang Tepat?</h3>
+                        <p>Kami senang membantu Anda menemukan essential yang tepat untuk sugar glider Anda.</p>
                     </div>
                 </div>
                 <a href="#" class="btn-whatsapp" id="wa-cta-btn" target="_blank">
-                    &#9993; Mengobrol dengan Kami
+                    &#9993; Chat dengan Kami
                 </a>
             </div>
         </section>
+    </main>
 
     <!-- FOOTER -->
     <footer>
@@ -127,7 +184,7 @@
                 <div class="footer-brand">
                     <img src="" alt="ChubbyCuddle Logo" class="logo-img" id="footer-logo">
                     <h3 id="footer-brand-name" style="margin-bottom: 0.5rem;">ChubbyCuddle</h3>
-                    <p id="footer-tagline">Everything Your Sugar Glider Needs</p>
+                    <p id="footer-tagline">Segala Kebutuhan Sugar Glider Anda</p>
                 </div>
                 <div class="footer-links">
                     <h4>Kategori</h4>
@@ -146,7 +203,7 @@
                 <div class="footer-links">
                     <h4>Kontak</h4>
                     <ul>
-                        <li><a href="#" id="footer-wa-link" target="_blank">WhatsApp Us</a></li>
+                        <li><a href="#" id="footer-wa-link" target="_blank">Hubungi Kami via WhatsApp</a></li>
                     </ul>
                 </div>
             </div>
@@ -160,7 +217,7 @@
     <div class="modal" id="product-modal">
         <div class="modal-content" id="modal-content">
             <button class="modal-close" id="modal-close">&times;</button>
-            <div class="modal-img">
+            <div class="modal-img" id="modal-image-container">
                 <img src="" alt="Product Image" id="modal-image">
             </div>
             <div class="modal-details">
@@ -168,7 +225,7 @@
                 <h3 class="modal-title" id="modal-title">Product Name</h3>
                 <div class="modal-desc" id="modal-desc">Product full description goes here.</div>
                 <a href="#" class="btn-whatsapp" id="modal-wa-btn" target="_blank" style="justify-content: center; width: 100%;">
-                    &#9993; Tanyakan Tentang Produk Ini
+                    &#9993; Tanya Tentang Produk Ini
                 </a>
             </div>
         </div>
