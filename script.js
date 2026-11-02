@@ -122,7 +122,7 @@ function initApp() {
     
     const waBaseUrl = `https://wa.me/${config.whatsappNumber}`;
     document.getElementById('wa-cta-btn').href = `${waBaseUrl}?text=${encodeURIComponent('Hai ChubbyCuddle! Saya butuh bantuan untuk memilih beberapa produk.')}`;
-    document.getElementById('footer-wa-link').href = `${waBaseUrl}?text=${encodeURIComponent('Hi ChubbyCuddle!')}`;
+    document.getElementById('footer-wa-link').href = `${waBaseUrl}?text=${encodeURIComponent('Hai ChubbyCuddle! Saya butuh bantuan untuk memilih beberapa produk.!')}`;
 
     setupHamburger();
     initCarousel();
