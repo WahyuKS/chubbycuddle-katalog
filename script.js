@@ -47,6 +47,16 @@ const config = {
         }
     ],
     
+    // Nama kategori versi tampilan (kunci harus sama dengan nama di "categories" & produk)
+    categoryLabels: {
+        "Feeding Supplies": "Makan & Minum",
+        "Travel and carrier": "Travel & Carrier",
+        "food and nutrition": "Makanan & Nutrisi",
+        "Grooming and toys": "Mainan & Grooming",
+        "Housing and cleaning": "Kandang & Kebersihan",
+        "Merchandise": "Merchandise"
+    },
+
     categories: [
         "Feeding Supplies",
         "Travel and carrier",
@@ -56,6 +66,64 @@ const config = {
         "Merchandise"
     ],
     
+    // ==========================================
+    // TESTIMONI (bisa pakai gambar)
+    // Cara menambah: simpan gambar di folder assets/ lalu tambahkan satu baris di bawah.
+    // - image   : satu gambar ("assets/a.jpg") ATAU beberapa gambar (["assets/a.jpg", "assets/b.jpg"]) (opsional)
+    // - text    : kutipan singkat (opsional, boleh kosong jika gambar sudah jelas)
+    // - name    : nama pembeli (boleh disamarkan, mis. "Kak Sarah, Pekanbaru")
+    // - product : produk yang dibeli (opsional)
+    // Jika daftar ini kosong, bagian testimoni otomatis disembunyikan.
+    // Hanya masukkan testimoni ASLI dari pembeli.
+    // ==========================================
+    testimonials: [
+        { image: "assets/testimo1.jpeg", name: "Kak DANA", product: "Aero View Travel Backpack", text: "recomended kak!" },
+        { image: ["assets/testimo2.jpeg", "assets/testimo2.1.jpeg"], name: "Kak LIA", product: "Spet Sugar Glider & Explorer Cruiser Wheel", text: "Barangnya bagus!" },
+        { image: ["assets/testimo3.jpeg"], name: "Kak RARA", product: "Aeropod Travel Carrier Pastel, Watermelon Bowl & Pena Manik", text: "Ci Barangnya Bagus, Aku suka Ci" },
+    ],
+
+    // ==========================================
+    // FAQ (jawaban boleh memakai HTML: <strong>, <ul>, <ol>)
+    // ==========================================
+    faqs: [
+        { q: "Apakah ChubbyCuddle melayani pengiriman ke seluruh Indonesia?",
+          a: "<p>Ya! Kami melayani pengiriman ke berbagai wilayah Indonesia. Untuk pengiriman ke luar Batam, pesanan akan dikirim melalui ekspedisi <strong>JNE atau J&amp;T Express</strong>, sesuai jangkauan dan ketentuan ekspedisi yang berlaku.</p>" },
+        { q: "Apakah tersedia gratis ongkir di Batam?",
+          a: "<p>Tentu! Kami menyediakan fasilitas <strong>FREE ONGKIR untuk area tertentu di Batam</strong>.</p><p>Area layanan gratis ongkir meliputi:</p><ul><li>Lubuk Baja</li><li>Nagoya</li><li>Nagoya &amp; Batu Selicin</li><li>Kampung Pelita</li><li>Lubuk Baja Kota</li><li>Tanjung Uma</li><li>Batu Ampar</li><li>Bengkong</li><li>Batam Kota</li></ul><p>Untuk lokasi di sekitar area tersebut, silakan hubungi tim ChubbyCuddle untuk memastikan jangkauan pengiriman gratis ongkir.</p>" },
+        { q: "Apakah bisa mengirim ke luar area gratis ongkir?",
+          a: "<p>Bisa! Kami tetap melayani pengiriman ke wilayah Batam lainnya. Biaya dan ketentuan pengiriman akan diinformasikan terlebih dahulu melalui WhatsApp.</p>" },
+        { q: "Berapa lama proses pengiriman?",
+          a: "<p>Untuk pengiriman dalam Batam, waktu pengantaran akan disesuaikan dengan jadwal pengiriman dan lokasi penerima.</p><p>Untuk luar Batam, estimasi waktu mengikuti layanan JNE atau J&amp;T yang dipilih. Nomor resi akan diberikan setelah pesanan diserahkan kepada pihak ekspedisi.</p>" },
+        { q: "Apakah produk diperiksa sebelum dikirim?",
+          a: "<p>Ya! Kami berusaha memastikan setiap produk dalam kondisi baik sebelum dikemas dan dikirimkan kepada pelanggan.</p><p>Kami juga menyarankan pelanggan memeriksa kondisi paket segera setelah diterima.</p>" },
+        { q: "Apakah barang yang sudah dibeli bisa dikembalikan?",
+          a: "<p>Kami mengutamakan kepuasan pelanggan. Namun, produk yang sudah diterima dalam kondisi baik, sesuai pesanan, dan tanpa kerusakan tidak dapat dikembalikan atau ditukar karena alasan berubah pikiran.</p><p>Apabila terdapat kerusakan akibat proses pengiriman atau produk tidak sesuai pesanan, silakan segera hubungi kami dengan menyertakan foto dan video unboxing agar dapat kami periksa lebih lanjut.</p>" },
+        { q: "Bagaimana jika barang rusak saat diterima?",
+          a: "<p>Jangan khawatir! Jika paket diterima dalam kondisi rusak, segera dokumentasikan kondisi paket dan produk, kemudian hubungi tim ChubbyCuddle.</p><p>Kami akan membantu memeriksa kendala tersebut dan mencari solusi sesuai kondisi serta ketentuan yang berlaku.</p>" },
+        { q: "Apakah produk ChubbyCuddle hanya untuk sugar glider?",
+          a: "<p>Tidak semuanya! Beberapa perlengkapan kami juga dapat digunakan untuk hewan kecil lainnya, tergantung fungsi, ukuran, dan kebutuhan masing-masing hewan.</p><p>Silakan tanyakan kepada kami jika Anda ragu mengenai kecocokan suatu produk.</p>" },
+        { q: "Bagaimana cara memesan produk?",
+          a: "<p>Sangat mudah!</p><ol><li>Pilih produk yang Anda inginkan di website ChubbyCuddle.</li><li>Hubungi kami melalui WhatsApp.</li><li>Konfirmasikan produk, jumlah, dan alamat pengiriman.</li><li>Lakukan pembayaran sesuai instruksi.</li><li>Pesanan akan diproses dan dikirimkan kepada Anda.</li></ol>" },
+        { q: "Apakah saya bisa bertanya sebelum membeli?",
+          a: "<p>Tentu saja! Kami senang membantu Anda memilih perlengkapan yang sesuai dengan kebutuhan anabul kesayangan.</p><p>Hubungi kami melalui WhatsApp untuk mendapatkan informasi produk, ketersediaan stok, rekomendasi, dan informasi pengiriman.</p>" },
+        { q: "Bagaimana cara mengetahui stok produk?",
+          a: "<p>Ketersediaan produk dapat berubah sewaktu-waktu. Untuk memastikan produk masih tersedia, silakan hubungi kami melalui WhatsApp sebelum melakukan pemesanan.</p>" },
+        { q: "Apakah ChubbyCuddle menerima pertanyaan atau konsultasi produk?",
+          a: "<p>Tentu! Kami percaya setiap hewan kecil memiliki kebutuhan yang berbeda. Jangan ragu untuk menghubungi kami jika membutuhkan informasi lebih lanjut mengenai fungsi, ukuran, atau cara penggunaan produk.</p>" },
+        { q: "Apakah harga yang tertera sudah termasuk ongkir?",
+          a: "<p>Harga produk yang ditampilkan belum termasuk biaya pengiriman, kecuali terdapat informasi promo gratis ongkir. Untuk area free ongkir Batam, silakan konfirmasikan lokasi Anda kepada tim kami.</p>" },
+        { q: "Apakah produk selalu ready stock?",
+          a: "<p>Kami berusaha menyediakan produk pilihan untuk kebutuhan hewan kesayangan Anda. Namun, stok dapat berubah sewaktu-waktu. Hubungi kami untuk memastikan ketersediaan sebelum memesan.</p>" },
+        { q: "Apakah pesanan bisa dibatalkan?",
+          a: "<p>Pembatalan pesanan hanya dapat dilakukan sebelum pesanan diproses atau dikirimkan, dengan persetujuan dari pihak ChubbyCuddle.</p>" },
+        { q: "Bagaimana jika paket terlambat sampai?",
+          a: "<p>Untuk pengiriman melalui JNE dan J&amp;T, estimasi pengiriman mengikuti kebijakan ekspedisi. Jika mengalami keterlambatan, Anda dapat menghubungi kami agar kami membantu mengecek status pengiriman.</p>" },
+        { q: "Apakah tersedia promo atau penawaran khusus?",
+          a: "<p>Tentu! ChubbyCuddle dapat menghadirkan promo produk, penawaran bundling, dan program gratis ongkir pada periode tertentu. Ikuti media sosial kami agar tidak ketinggalan informasi terbaru.</p>" },
+        { q: "Apakah bisa membeli beberapa produk sekaligus?",
+          a: "<p>Tentu! Anda dapat menggabungkan beberapa produk dalam satu pesanan. Kami juga dapat membantu merekomendasikan kombinasi perlengkapan yang sesuai dengan kebutuhan sugar glider dan hewan kecil lainnya.</p>" }
+    ],
+
     products: [
         { name: "Spet Sugar Glider", price: "Rp 50.000", bestSeller: true, description: "Spet ini memiliki ujung corong halus yang pas di mulut mungil hewan seperti sugar glider atau hewan kecil lainnya, memungkinkan kontrol aliran cairan secara presisi agar hewan tidak mudah tersedak. Produk ini sudah termasuk sikat mini untuk membersihkan sisa endapan susu di bagian dalam corong yang sempit yang tidak dapat digapai oleh sikat biasa. Terdapat skala ukur untuk memudahkan porsi asupan yang dibutuhkan anabul.", category: "Feeding Supplies", image: "assets/CC120001.jpg" },
         { name: "Pet Cargo Paw Pastel Kotak", price: "Rp 140.000", bestSeller: true, description: "Pet cargo praktis untuk perjalanan anabul yang aman dan nyaman! Dilengkapi tutup transparan untuk memantau anabul, ventilasi udara, alas plastik agar tetap bersih dan kering, serta botol minum mini 60 ml. Memiliki pegangan nyaman dan kunci bermotif paw yang lucu. \n\n 📏 Ukuran: 18,4 × 16,3 × 17 cm \n 🎨 Warna: Biru, Cokelat, Hijau, Pink, dan Ungu \n\n Cocok untuk perjalanan singkat bersama anabul kesayangan! 🐶🐱💕", category: "Travel and carrier", image: ["assets/CC120002 - Blue.jpg", "assets/CC120002 - Choco.jpg", "assets/CC120002 - Green.jpg", "assets/CC120002 - Pink.jpg", "assets/CC120002 - Purple.jpg"] },
@@ -68,9 +136,9 @@ const config = {
         { name: "Glove Pouch Grooming 2-in-1", price: "Rp 335.000", bestSeller: false, description: "Memotong kuku anabul jadi lebih praktis dengan sarung tangan berbahan plush yang lembut dan tebal, dilengkapi desain wajah sugar glider yang menggemaskan. Membantu melindungi tangan dari cakaran dan gigitan saat grooming. Bisa juga digunakan sebagai sleeping pouch yang hangat dan nyaman di dalam kandang. \n\n 🎨 Warna: Pink dan Oranye. \n\n Satu produk dengan dua fungsi: membantu perawatan sekaligus menjadi tempat tidur nyaman untuk sugar glider kesayangan! 💕", category: "Grooming and toys", image: ["assets/CC120009 - Orange.jpg", "assets/CC120009 - Pink.jpg"] },
         { name: "Mini Sweeper Set (Sapu + Sekop Mini)", price: "Rp 23.000", bestSeller: true, description: "Bersihkan sisa makanan dan remah-remah di sekitar kandang sugar glider dengan lebih praktis! Dilengkapi sikat berbulu rapat dan lembut untuk menyapu kotoran kecil serta sekop mini bergagang panjang yang memudahkan menjangkau sudut sempit.\n\n 🤍 Warna: Putih dengan aksen gagang kekuningan.\n\n Praktis, minimalis, dan estetik untuk menjaga area kandang anabul tetap bersih setiap hari! 🐿️✨.", category: "Housing and cleaning", image: ["assets/CC120010.jpg"] },
         { name: "Aero View Travel Backpack", price: "Rp 429.000", bestSeller: true, description: "Ajak anabul bepergian dengan lebih praktis dan stylish! Tas bergaya astronot ini dilengkapi panel depan transparan untuk memantau hewan, tangkringan tali warna-warni, serta dua mangkuk stainless steel untuk makanan dan minuman. Memiliki lantai jaring besi agar kotoran jatuh ke tatakan bawah sehingga lebih mudah dibersihkan, serta handle pegangan yang nyaman.\n\n 📏 Dimensi: 30 × 21 × 32 cm \n 🎨 Warna: Army Green, Pink, Purple, dan Black. \n\n Cocok untuk menemani petualangan sugar glider, burung, dan hewan kecil lainnya! 🐿️💕.", category: "Travel and carrier", image: ["assets/CC120011 - Army.jpg","assets/CC120011 - Black.jpg", "assets/CC120011 - Pink.jpg", "assets/CC120011 - Purple.jpg"] },
-        { name: "Alas Besi 2-in-1", price: "Rp 79.000", bestSeller: false, description: "Alas jaring besi multifungsi untuk travel carrier maupun kandang anabul! Desain jaring berongga membantu kotoran jatuh ke bawah agar kaki tetap bersih dan kering. Bisa juga dikreasikan menjadi pijakan atau ayunan untuk sugar glider dan burung dengan tambahan pengait atau rantai.\n\n ✨ Keunggulan: \n\n\\ Material besi kokoh.\n Membantu menjaga kebersihan alas carrier.\n Multifungsi untuk pijakan atau ayunan kandang.\n\n Praktis, awet, dan cocok untuk melengkapi perlengkapan anabul kesayangan! 🐿️💕.", category: "Grooming and toys", image: ["assets/CC120012.jpg"] },
+        { name: "Alas Besi 2-in-1", price: "Rp 79.000", bestSeller: false, description: "Alas jaring besi multifungsi untuk travel carrier maupun kandang anabul! Desain jaring berongga membantu kotoran jatuh ke bawah agar kaki tetap bersih dan kering. Bisa juga dikreasikan menjadi pijakan atau ayunan untuk sugar glider dan burung dengan tambahan pengait atau rantai.\n\n ✨ Keunggulan: \n\n Material besi kokoh.\n Membantu menjaga kebersihan alas carrier.\n Multifungsi untuk pijakan atau ayunan kandang.\n\n Praktis, awet, dan cocok untuk melengkapi perlengkapan anabul kesayangan! 🐿️💕.", category: "Grooming and toys", image: ["assets/CC120012.jpg"] },
         { name: "Mini Brush", price: "Rp 5.000", bestSeller: true, description: "Sudah punya spet sugar glider tetapi susah membersihkan kerak susu di corongnya? Sikat mini ini solusinya! Sikat ini dapat menjangkau area yang tidak dapat dijangkau oleh sikat lainnya. Sehingga anda tidak perlu khawatir anabul anda akan menelan sisa-sisa makanan yang tidak dapat dibersihkan sebelumnya..", category: "Housing and cleaning", image: "assets/CC120013.jpg" },
-        { name: "Swing for Photoshoot", price: "Rp 135.000", bestSeller: false, description: "SOLD OUT.", category: "Grooming and toys", image: "assets/CC120014.jpg" },
+        { name: "Swing for Photoshoot", price: "Rp 135.000", bestSeller: false, soldOut: true, description: "Stok sedang kosong. Tanya admin untuk estimasi restock.", category: "Grooming and toys", image: "assets/CC120014.jpg" },
         { name: "Cherry Bowl", price: "Rp 58.000", bestSeller: false, description: "Bikin waktu makan anabul makin lucu dengan mangkuk berbentuk buah cherry yang aesthetic! Dilengkapi 2 sekat untuk menyajikan susu di satu sisi dan buah atau sayuran favorit anabul di sisi lainnya.\n\n 📏 Dimensi: 12,4 × 8 × 3,3 cm \n 🎨 Warna: Pink, Ungu, dan Kuning. \n\n Lucu, unik, dan praktis untuk menemani waktu makan sugar glider kesayangan! 🐿️💕.", category: "Feeding Supplies", image: ["assets/CC120015 - Pink.jpg", "assets/CC120015 - Purple.jpg", "assets/CC120015 - Yellow.jpg"] },
         { name: "Watermelon Bowl", price: "Rp 81.000", bestSeller: true, description: "Bikin waktu makan anabul makin menarik dengan mangkuk berbentuk semangka yang unik dan berwarna cerah! Dilengkapi 2 sekat untuk memisahkan susu, buah, atau sayuran favorit anabul agar lebih praktis saat menyajikan makanan.\n\n 📏 Dimensi: Panjang 11 cm × Tinggi 2,3 cm \n 🎨 Warna: Merah, Kuning, Oranye, dan Putih. \n\n Lucu, colorful, dan cocok untuk melengkapi perlengkapan makan sugar glider kesayangan! 🐿️💕.", category: "Feeding Supplies", image: ["assets/CC120016.jpg"] },
         { name: "Apple in Center Bowl", price: "Rp 93.000", bestSeller: false, description: "Bikin waktu makan sugar glider makin unik dengan mangkuk apel berwarna pastel yang menggemaskan! Memiliki desain apel di bagian tengah yang memungkinkan susu mengalir cantik ke dasar mangkuk, menciptakan tampilan seperti air mancur mini yang estetik dan menarik untuk direkam.\n\n 📏 Dimensi: Diameter 9,8 cm × Tinggi 2,5 cm \n 🎨 Warna: Pink Pastel dan Blue Pastel.\n\n Desain glossy, lucu, dan unik untuk pengalaman makan anabul yang lebih menyenangkan! 🐿️💕.", category: "Feeding Supplies", image: "assets/CC120017.jpg" },
@@ -105,6 +173,181 @@ let currentPage = 1;
 let itemsPerPage = 10;
 let filteredProducts = [];
 
+
+/** 
+ * ==========================================
+ * 2b. HELPER: TRACKING, WA LINK, HARGA
+ * ==========================================
+ */
+function trackEvent(name, params) {
+    try { if (typeof fbq === 'function') fbq('track', name, params || {}); } catch (e) {}
+}
+
+function catLabel(cat) {
+    return (config.categoryLabels && config.categoryLabels[cat]) || cat;
+}
+
+// Harga "Rp 50.000" -> 50000 ; "Rp xx.xxx" / "TANYA ADMIN" -> 0
+function priceToNumber(str) {
+    if (!str) return 0;
+    const digits = String(str).replace(/[^0-9]/g, '');
+    return /x/i.test(str) || !digits ? 0 : parseInt(digits, 10);
+}
+
+function displayPrice(p) {
+    return priceToNumber(p.price) > 0 ? p.price : 'Tanya Admin';
+}
+
+function shortDesc(p) {
+    const first = p.description.split('\n')[0].replace(/\s+/g, ' ').trim();
+    if (first.length <= 90) return first;
+    return first.substring(0, 90).replace(/\s+\S*$/, '') + '...';
+}
+
+// Mengetahui pelanggan datang dari iklan mana (untuk dicatat di chat WA)
+function getAdSource() {
+    const p = new URLSearchParams(location.search);
+    const src = p.get('utm_source') || (p.get('fbclid') ? 'facebook' : '') || (p.get('ttclid') ? 'tiktok' : '') || (p.get('gclid') ? 'google' : '');
+    const camp = p.get('utm_campaign');
+    return src ? src + (camp ? '/' + camp : '') : '';
+}
+
+function buildWaLink(msg) {
+    const src = getAdSource();
+    const text = src ? `${msg}\n\n(Info: dari iklan ${src})` : msg;
+    return `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(text)}`;
+}
+
+// JSON-LD produk dibuat otomatis dari katalog
+function injectJsonLd() {
+    const el = document.getElementById('jsonld-products');
+    if (!el) return;
+    const items = config.products
+        .filter(p => priceToNumber(p.price) > 0)
+        .map((p, i) => {
+            const img = Array.isArray(p.image) ? p.image[0] : p.image;
+            return {
+                "@type": "ListItem",
+                "position": i + 1,
+                "item": {
+                    "@type": "Product",
+                    "name": p.name,
+                    "image": new URL(img, location.origin + '/').href,
+                    "description": p.description.replace(/\s+/g, ' ').trim().substring(0, 300),
+                    "category": catLabel(p.category),
+                    "brand": { "@type": "Brand", "name": config.brandName },
+                    "offers": {
+                        "@type": "Offer",
+                        "priceCurrency": "IDR",
+                        "price": String(priceToNumber(p.price)),
+                        "availability": p.soldOut ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+                        "url": location.origin + '/#catalog'
+                    }
+                }
+            };
+        });
+    el.textContent = JSON.stringify({ "@context": "https://schema.org/", "@type": "ItemList", "itemListElement": items });
+}
+
+
+/** 
+ * ==========================================
+ * 2c. TESTIMONI
+ * ==========================================
+ */
+function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+function renderTestimonials() {
+    const section = document.getElementById('testimonials');
+    const grid = document.getElementById('testimonial-grid');
+    const list = config.testimonials || [];
+    if (!section || !grid) return;
+    if (list.length === 0) { section.style.display = 'none'; return; }
+
+    grid.innerHTML = list.map(t => {
+        const imgs = Array.isArray(t.image) ? t.image : (t.image ? [t.image] : []);
+        const img = imgs.length
+            ? `<div class="testi-photos count-${Math.min(imgs.length, 3)}">${imgs.map((src, i) => `<img class="testi-photo" src="${escapeHtml(src)}" alt="Testimoni ${escapeHtml(t.name)} ${i + 1}" loading="lazy" data-full="${escapeHtml(src)}">`).join('')}</div>`
+            : '';
+        const hint = imgs.length ? '<div class="testi-zoom-hint">Ketuk gambar untuk memperbesar</div>' : '';
+        const text = t.text ? `<p class="testi-text">"${escapeHtml(t.text)}"</p>` : '';
+        const product = t.product ? `<div class="testi-product">Membeli: ${escapeHtml(t.product)}</div>` : '';
+        return `
+            <div class="testimonial-card">
+                ${img}
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                ${text}
+                ${product}
+                ${hint}
+                <div class="testi-user">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t.name || 'P')}&background=2563EB&color=fff" alt="">
+                    <div class="user-info">
+                        <h4>${escapeHtml(t.name)}</h4>
+                        <span>Pembeli ChubbyCuddle</span>
+                    </div>
+                </div>
+            </div>`;
+    }).join('');
+
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+    grid.addEventListener('click', (e) => {
+        const img = e.target.closest('.testi-photo');
+        if (!img) return;
+        lbImg.src = img.dataset.full;
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    const closeLb = () => { lb.classList.remove('active'); document.body.style.overflow = 'auto'; };
+    lb.addEventListener('click', closeLb);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('active')) closeLb(); });
+}
+
+
+/** 
+ * ==========================================
+ * 2d. FAQ & PRODUK TERKAIT
+ * ==========================================
+ */
+function renderFaq() {
+    const list = document.getElementById('faq-list');
+    if (!list || !config.faqs || !config.faqs.length) return;
+    list.innerHTML = config.faqs.map((f, i) => `
+        <details class="faq-item">
+            <summary>${i + 1}. ${f.q}</summary>
+            <div class="faq-answer">${f.a}</div>
+        </details>`).join('');
+    // Hanya satu jawaban terbuka dalam satu waktu
+    list.addEventListener('toggle', (e) => {
+        if (e.target.open) list.querySelectorAll('details[open]').forEach(d => { if (d !== e.target) d.open = false; });
+    }, true);
+}
+
+function renderRelatedProducts(currentIndex) {
+    const box = document.getElementById('modal-related');
+    if (!box) return;
+    const cur = config.products[currentIndex];
+    const eligible = config.products
+        .map((p, i) => i)
+        .filter(i => i !== currentIndex && !config.products[i].soldOut && priceToNumber(config.products[i].price) > 0 && config.products[i].category !== 'Merchandise');
+    const best = (a, b) => (config.products[b].bestSeller ? 1 : 0) - (config.products[a].bestSeller ? 1 : 0);
+    const same = eligible.filter(i => config.products[i].category === cur.category).sort(best);
+    const others = eligible.filter(i => config.products[i].category !== cur.category && config.products[i].bestSeller);
+    const picks = [...same, ...others].slice(0, 3);
+    if (!picks.length) { box.innerHTML = ''; return; }
+    box.innerHTML = `<h4>Produk Terkait</h4><div class="related-grid">` + picks.map(i => {
+        const p = config.products[i];
+        const img = Array.isArray(p.image) ? p.image[0] : p.image;
+        return `<div class="related-card" onclick="openModal(${i}); document.getElementById('modal-content').scrollTop = 0;">
+            <img src="${img}" alt="${p.name}" loading="lazy">
+            <div class="r-name">${p.name}</div>
+            <div class="r-price">${p.price}</div>
+        </div>`;
+    }).join('') + `</div>`;
+}
+
 /** 
  * ==========================================
  * 3. FUNGSI INISIALISASI
@@ -120,10 +363,22 @@ function initApp() {
     document.getElementById('footer-tagline').textContent = config.tagline;
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
     
-    const waBaseUrl = `https://wa.me/${config.whatsappNumber}`;
-    document.getElementById('wa-cta-btn').href = `${waBaseUrl}?text=${encodeURIComponent('Hai ChubbyCuddle! Saya butuh bantuan untuk memilih beberapa produk.')}`;
-    document.getElementById('footer-wa-link').href = `${waBaseUrl}?text=${encodeURIComponent('Hai ChubbyCuddle! Saya butuh bantuan untuk memilih beberapa produk.!')}`;
+    const helpMsg = 'Hai ChubbyCuddle! Saya butuh bantuan untuk memilih beberapa produk.';
+    const helpLink = buildWaLink(helpMsg);
+    ['wa-cta-btn', 'footer-wa-link', 'topbar-wa', 'wa-float', 'faq-wa-btn'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.href = helpLink;
+    });
 
+    // Catat klik WhatsApp sebagai event "Contact" di Meta Pixel (untuk optimasi iklan)
+    document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href^="https://wa.me/"]');
+        if (a) trackEvent('Contact', { content_name: a.dataset.track || 'whatsapp' });
+    });
+
+    injectJsonLd();
+    renderTestimonials();
+    renderFaq();
     setupHamburger();
     initCarousel();
     renderCategories();
@@ -146,7 +401,7 @@ function initCarousel() {
         const slideEl = document.createElement('div');
         slideEl.className = 'carousel-slide';
         slideEl.innerHTML = `
-            <img src="${slide.image}" alt="${slide.title}" onerror="this.src='https://ui-avatars.com/api/?name=${slide.title}&background=2563EB&color=fff&size=800'">
+            <img src="${slide.image}" ${index > 0 ? 'loading="lazy"' : ''} alt="${slide.title}" onerror="this.src='https://ui-avatars.com/api/?name=${slide.title}&background=2563EB&color=fff&size=800'">
             <div class="carousel-overlay">
                 <div class="carousel-content">
                     <h2>${slide.title}</h2>
@@ -253,13 +508,15 @@ function renderCategories() {
     const icons = ['&#127869;', '&#128092;', '&#127823;', '&#127919;', '&#127968;', '&#127873;'];
 
     config.categories.forEach((cat, index) => {
+        // Sembunyikan kategori yang belum punya produk
+        if (!config.products.some(p => p.category === cat)) return;
         grid.innerHTML += `
             <div class="category-card" id="cat-card-${index}" onclick="setActiveCategory('${cat}')">
                 <div class="category-icon">${icons[index] || '&#128062;'}</div>
-                <h3>${cat}</h3>
+                <h3>${catLabel(cat)}</h3>
             </div>
         `;
-        footerList.innerHTML += `<li><a href="javascript:void(0)" onclick="setActiveCategory('${cat}'); document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });">${cat}</a></li>`;
+        footerList.innerHTML += `<li><a href="javascript:void(0)" onclick="setActiveCategory('${cat}'); document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });">${catLabel(cat)}</a></li>`;
     });
 }
 
@@ -272,7 +529,8 @@ function setActiveCategory(category) {
         document.getElementById('cat-card-All').classList.add('active');
     } else {
         const index = config.categories.indexOf(category);
-        if(index > -1) document.getElementById(`cat-card-${index}`).classList.add('active');
+        const el = document.getElementById(`cat-card-${index}`);
+        if (el) el.classList.add('active');
     }
     
     filterAndSortProducts();
@@ -319,11 +577,16 @@ function filterAndSortProducts() {
         return matchCategory && matchSearch;
     });
 
-    if (currentSort === 'az') {
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (currentSort === 'za') {
-        filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-    }
+    const soldRank = p => (p.soldOut ? 1 : 0);
+    const byDefault = (a, b) => (b.bestSeller ? 1 : 0) - (a.bestSeller ? 1 : 0);
+    let cmp;
+    if (currentSort === 'az') cmp = (a, b) => a.name.localeCompare(b.name);
+    else if (currentSort === 'za') cmp = (a, b) => b.name.localeCompare(a.name);
+    else if (currentSort === 'price-asc') cmp = (a, b) => (priceToNumber(a.price) || Infinity) - (priceToNumber(b.price) || Infinity);
+    else if (currentSort === 'price-desc') cmp = (a, b) => (priceToNumber(b.price) || -1) - (priceToNumber(a.price) || -1);
+    else cmp = byDefault; // default: best seller dulu
+    // Produk habis selalu di belakang
+    filteredProducts.sort((a, b) => soldRank(a) - soldRank(b) || cmp(a, b));
 
     renderCatalog();
 }
@@ -340,7 +603,7 @@ function renderCatalog() {
         grid.style.display = 'none';
         pagination.style.display = 'none';
         emptyState.style.display = 'block';
-        info.textContent = 'Lihat 0 products';
+        info.textContent = 'Menampilkan 0 produk';
         return;
     }
     
@@ -355,7 +618,7 @@ function renderCatalog() {
     const endIndex = startIndex + itemsPerPage;
     const paginatedItems = filteredProducts.slice(startIndex, endIndex);
 
-    info.textContent = `Lihat ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} products`;
+    info.textContent = `Menampilkan ${startIndex + 1}-${Math.min(endIndex, filteredProducts.length)} dari ${filteredProducts.length} produk`;
     
     const pageNumbersContainer = document.getElementById('page-numbers');
     if (pageNumbersContainer) {
@@ -382,21 +645,32 @@ function renderCatalog() {
         
         let coverImg = Array.isArray(product.image) ? product.image[0] : product.image;
         
-        const badgeHTML = product.bestSeller ? `<div style="position:absolute; top:10px; right:10px; background-color:#EF4444; color:white; font-size:0.7rem; font-weight:bold; padding:4px 10px; border-radius:12px; z-index:2; box-shadow:0 2px 4px rgba(0,0,0,0.2);">Best Seller 🔥</div>` : '';
-        const priceHTML = product.price ? `<div style="color:var(--primary-blue); font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">${product.price}</div>` : '';
+        if (product.soldOut) card.classList.add('sold-out');
+        const badgeHTML = product.soldOut
+            ? `<div style="position:absolute; top:10px; right:10px; background-color:#64748B; color:white; font-size:0.7rem; font-weight:bold; padding:4px 10px; border-radius:12px; z-index:2;">Stok Habis</div>`
+            : (product.bestSeller ? `<div style="position:absolute; top:10px; right:10px; background-color:#EF4444; color:white; font-size:0.7rem; font-weight:bold; padding:4px 10px; border-radius:12px; z-index:2; box-shadow:0 2px 4px rgba(0,0,0,0.2);">Best Seller 🔥</div>` : '');
+        const hasPrice = priceToNumber(product.price) > 0;
+        const priceHTML = `<div class="${hasPrice ? '' : 'price-ask'}" style="color:var(--primary-blue); font-size:1.1rem; font-weight:700; margin-bottom:0.5rem;">${displayPrice(product)}</div>`;
+        const orderMsg = product.soldOut
+            ? `Hai ChubbyCuddle! Kapan ${product.name} restock?`
+            : `Hai ChubbyCuddle! Saya mau pesan ${product.name}${hasPrice ? ' (' + product.price + ')' : ''}. Apakah stok masih ready?`;
+        const orderLabel = product.soldOut ? 'Tanya Restock' : (hasPrice ? 'Pesan via WA' : 'Tanya Harga');
 
         card.innerHTML = `
             <div class="product-number">${absoluteIndex}</div>
             ${badgeHTML}
             <div class="product-img-wrapper">
-                <img src="${coverImg}" alt="${product.name}" onerror="this.src='https://placehold.co/400x400/EFF6FF/2563EB?text=ChubbyCuddle'">
+                <img src="${coverImg}" alt="${product.name}" loading="lazy" decoding="async" onerror="this.src='https://placehold.co/400x400/EFF6FF/2563EB?text=ChubbyCuddle'">
             </div>
             <div class="product-content">
-                <div class="product-category">${product.category}</div>
+                <div class="product-category">${catLabel(product.category)}</div>
                 <h3 class="product-name">${product.name}</h3>
                 ${priceHTML}
-                <p class="product-desc">${product.description.substring(0, 60)}${product.description.length > 60 ? '...' : ''}</p>
-                <button class="btn-outline" onclick="openModal(${config.products.indexOf(product)})">Lihat Detail</button>
+                <p class="product-desc">${shortDesc(product)}</p>
+                <div class="product-actions">
+                    <a class="btn-wa-small" href="${buildWaLink(orderMsg)}" target="_blank" rel="noopener" data-track="card_order">${orderLabel}</a>
+                    <button class="btn-outline" onclick="openModal(${config.products.indexOf(product)})">Lihat Detail</button>
+                </div>
             </div>
         `;
         grid.appendChild(card);
@@ -434,15 +708,30 @@ function openModal(originalIndex) {
         updateModalDots();
     }
     
-    const modalBadge = product.bestSeller ? `<span style="background-color:#EF4444; color:white; font-size:0.75rem; font-weight:bold; padding:2px 8px; border-radius:12px; margin-left:10px; vertical-align:middle;">Best Seller 🔥</span>` : '';
-    const modalPrice = product.price ? `<div style="font-size:1.4rem; font-weight:bold; color:var(--primary-blue); margin-bottom:1rem;">${product.price}</div>` : '';
+    const modalBadge = product.bestSeller ? `<span class="modal-badge">Best Seller 🔥</span>` : '';
+    const modalPrice = `<div style="font-size:1.4rem; font-weight:bold; color:var(--primary-blue); margin-bottom:1rem;">${displayPrice(product)}</div>`;
 
-    document.getElementById('modal-category').textContent = product.category;
+    document.getElementById('modal-category').textContent = catLabel(product.category);
     document.getElementById('modal-title').innerHTML = `${product.name} ${modalBadge}`;
     document.getElementById('modal-desc').innerHTML = modalPrice + product.description.replace(/\n/g, '<br>');
     
-    const waMsg = `Hai ChubbyCuddle! Saya ingin tahu lebih banyak tentang ${product.name}.`;
-    document.getElementById('modal-wa-btn').href = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(waMsg)}`;
+    const hasPrice = priceToNumber(product.price) > 0;
+    const waMsg = product.soldOut
+        ? `Hai ChubbyCuddle! Kapan ${product.name} restock?`
+        : `Hai ChubbyCuddle! Saya mau pesan ${product.name}${hasPrice ? ' (' + product.price + ')' : ''}. Apakah stok masih ready?`;
+    const waBtn = document.getElementById('modal-wa-btn');
+    waBtn.href = buildWaLink(waMsg);
+    waBtn.innerHTML = product.soldOut ? '&#9993; Tanya Restock via WhatsApp' : '&#9993; Pesan via WhatsApp';
+    renderRelatedProducts(originalIndex);
+
+    // Event Meta Pixel: pengunjung melihat detail produk
+    trackEvent('ViewContent', {
+        content_name: product.name,
+        content_category: product.category,
+        content_type: 'product',
+        value: priceToNumber(product.price),
+        currency: 'IDR'
+    });
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; 
