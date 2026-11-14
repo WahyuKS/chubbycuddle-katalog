@@ -24,14 +24,23 @@
     return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encoded;
   }
 
-  // 1. Pasang link WhatsApp ke seluruh tombol CTA konversi
-  function initWhatsAppLinks() {
+function initWhatsAppLinks() {
     const waButtons = document.querySelectorAll(".js-wa-link");
     waButtons.forEach(function (btn) {
       const source = btn.getAttribute("data-wa-source") || "Landing Page";
       btn.setAttribute("href", buildWhatsAppUrl(source));
       btn.setAttribute("target", "_blank");
       btn.setAttribute("rel", "noopener noreferrer");
+
+      btn.addEventListener("click", function () {
+        if (typeof fbq === "function") {
+          fbq("track", "Lead", {
+            content_name: PRODUCT_NAME,
+            value: 55000,
+            currency: "IDR"
+          });
+        }
+      });
     });
   }
 
