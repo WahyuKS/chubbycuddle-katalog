@@ -372,8 +372,12 @@ function initApp() {
 
     // Catat klik WhatsApp sebagai event "Contact" di Meta Pixel (untuk optimasi iklan)
     document.addEventListener('click', (e) => {
-        const a = e.target.closest('a[href^="https://wa.me/"]');
-        if (a) trackEvent('Contact', { content_name: a.dataset.track || 'whatsapp' });
+    const a = e.target.closest('a[href^="https://wa.me/"]');
+    if (a) {
+        const info = { content_name: a.dataset.track || a.id || 'whatsapp' };
+        trackEvent('Lead', info);
+        trackEvent('Contact', info);
+    }
     });
 
     injectJsonLd();
