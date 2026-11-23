@@ -391,11 +391,17 @@ function buildHome() {
     const testimonials = (D.testimonials || []).map(t => {
         const imgs = Array.isArray(t.image) ? t.image : (t.image ? [t.image] : []);
         const initials = String(t.name || 'P').replace(/^kak\s+/i, '').slice(0, 1).toUpperCase();
+        const gallery = imgs.map(s => imgMap[s] ? imgMap[s].w1000 : '/' + s);
         return `<figure class="testi">
-  ${imgs.length ? `<div class="testi-photos n${Math.min(imgs.length, 2)}">${imgs.slice(0, 2).map((s, k) => `<button type="button" class="testi-photo" data-full="${imgMap[s] ? imgMap[s].w1000 : '/' + s}" aria-label="Perbesar foto testimoni ${esc(t.name)}">${img(s, { alt: `Testimoni ${t.name} ${k + 1}`, small: 'w480', large: 'w480', sizes: '240px' })}</button>`).join('')}</div>` : ''}
-  <div class="stars" aria-label="5 dari 5">${ICON.star.repeat(5)}</div>
-  ${t.text ? `<blockquote>${esc(t.text)}</blockquote>` : ''}
-  <figcaption><span class="avatar">${esc(initials)}</span><span><strong>${esc(t.name)}</strong>${t.product ? `<small>Membeli: ${esc(t.product)}</small>` : ''}</span></figcaption>
+  ${imgs.length ? `<button type="button" class="testi-media" data-gallery="${esc(JSON.stringify(gallery))}" aria-label="Lihat ${imgs.length} foto testimoni ${esc(t.name)}">
+    ${img(imgs[0], { alt: `Bukti chat testimoni ${t.name}`, small: 'w480', large: 'w1000', sizes: '(max-width: 640px) 80vw, 380px' })}
+    <span class="testi-zoom">${ICON.search}${imgs.length > 1 ? `${imgs.length} foto` : 'Lihat'}</span>
+  </button>` : ''}
+  <div class="testi-body">
+    <div class="stars" aria-label="5 dari 5">${ICON.star.repeat(5)}</div>
+    ${t.text ? `<blockquote>${esc(t.text)}</blockquote>` : ''}
+    <figcaption><span class="avatar">${esc(initials)}</span><span><strong>${esc(t.name)}</strong>${t.product ? `<small>${esc(t.product)}</small>` : ''}</span><span class="verified">${ICON.check}Pembeli</span></figcaption>
+  </div>
 </figure>`;
     }).join('\n');
 
@@ -427,7 +433,7 @@ ${header()}
         </ul>
       </div>
       <div class="hero-visual">
-        <div class="hero-img">
+        <div class="hero-img" style="background-image:url('${hero.og}')">
           <img src="${hero.w800}" srcset="${hero.w800} 800w, ${hero.w1400} 1400w" sizes="(max-width: 900px) 100vw, 640px" width="${hero.dispW}" height="${hero.dispH}" alt="Koleksi perlengkapan sugar glider ${esc(D.brandName)}: pet cargo, mangkuk keramik, dan travel carrier" fetchpriority="high" decoding="async">
         </div>
         ${best[0] ? `<a class="hero-chip" href="${best[0].url}">${img(best[0].images[0].src, { alt: '', small: 'w400', large: 'w400', sizes: '56px' })}<span><small>Best Seller</small><strong>${esc(best[0].name)}</strong><em>${esc(best[0].priceText)}</em></span>${ICON.arrow}</a>` : ''}
@@ -549,7 +555,7 @@ ${header()}
   </section>
 </main>
 ${footer()}
-<div class="lightbox" id="lightbox" hidden><button type="button" class="lightbox-close" aria-label="Tutup">×</button><img alt="Foto testimoni"></div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto testimoni" hidden><button type="button" class="lightbox-close" aria-label="Tutup">×</button><div class="lightbox-track" id="lightbox-track"></div><p class="lightbox-count" id="lightbox-count"></p></div>
 ${tail()}`;
     write('index.html', html);
 }

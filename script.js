@@ -118,14 +118,36 @@
     /* ---------- Lightbox testimoni ---------- */
     var lb = document.getElementById('lightbox');
     if (lb) {
-        var lbImg = lb.querySelector('img');
-        var close = function () { lb.hidden = true; document.body.classList.remove('no-scroll'); };
+        var track = document.getElementById('lightbox-track');
+        var counter = document.getElementById('lightbox-count');
+        var total = 0;
+        var close = function () { lb.hidden = true; track.innerHTML = ''; document.body.classList.remove('no-scroll'); };
+        var updateCount = function () {
+            if (total < 2) { counter.textContent = ''; return; }
+            counter.textContent = (Math.round(track.scrollLeft / track.clientWidth) + 1) + ' / ' + total;
+        };
         document.addEventListener('click', function (e) {
-            var b = e.target.closest && e.target.closest('.testi-photo');
-            if (b) { lbImg.src = b.getAttribute('data-full'); lb.hidden = false; document.body.classList.add('no-scroll'); }
+            var b = e.target.closest && e.target.closest('.testi-media');
+            if (!b) return;
+            var list = [];
+            try { list = JSON.parse(b.getAttribute('data-gallery')) || []; } catch (err) {}
+            total = list.length;
+            track.innerHTML = list.map(function (src, i) {
+                return '<figure><img src="' + src + '" alt="Foto testimoni ' + (i + 1) + '"></figure>';
+            }).join('');
+            lb.hidden = false;
+            track.scrollLeft = 0;
+            updateCount();
+            document.body.classList.add('no-scroll');
         });
-        lb.addEventListener('click', close);
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) close(); });
+        track.addEventListener('scroll', updateCount, { passive: true });
+        lb.addEventListener('click', function (e) { if (e.target.tagName !== 'IMG') close(); });
+        document.addEventListener('keydown', function (e) {
+            if (lb.hidden) return;
+            if (e.key === 'Escape') close();
+            if (e.key === 'ArrowRight') track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+            if (e.key === 'ArrowLeft') track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+        });
     }
 
     /* ---------- Animasi halus saat elemen masuk layar ---------- */
