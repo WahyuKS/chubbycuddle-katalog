@@ -19,11 +19,20 @@ npm run build    # buat ulang semua halaman
 > Jangan edit `index.html`, folder `produk/`, `kategori/`, `sitemap.xml`, atau `assets/img/`
 > secara manual — semuanya dibuat ulang oleh `build.js`.
 
+## Artikel panduan (SEO keyword umum)
+
+Artikel ada di **`panduan.js`** dan jadi halaman `/panduan/<slug>/`. Setiap artikel menargetkan satu keyword
+(mis. "perlengkapan sugar glider", "makanan sugar glider") dan otomatis menampilkan produk terkait.
+Untuk menambah artikel, salin satu blok artikel di `panduan.js`, ganti isinya, lalu push.
+Link di dalam teks: `[[produk:slug|teks]]`, `[[kategori:slug|teks]]`, `[[panduan:slug|teks]]`.
+
 ## Struktur
 
 | File / folder | Isi |
 |---|---|
-| `data.js` | **Semua konten** (yang Anda edit) |
+| `data.js` | **Semua konten produk** (yang Anda edit) |
+| `panduan.js` | Artikel panduan / blog SEO |
+| `panduan/<slug>/` | Halaman artikel (hasil build) |
 | `build.js` | Generator halaman statis + optimasi gambar (WebP) |
 | `style.css` / `script.js` | Tampilan & interaksi (filter, galeri, link WA, Meta Pixel) |
 | `index.html` | Beranda (hasil build) |

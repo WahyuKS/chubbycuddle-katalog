@@ -116,7 +116,7 @@ function initWhatsAppLinks() {
 
     function closeLightbox() {
       lightbox.hidden = true;
-      lightboxImg.src = "";
+      lightboxImg.removeAttribute("src");
       document.body.style.overflow = "";
       if (lastFocusedElement) lastFocusedElement.focus();
     }

@@ -43,7 +43,7 @@ const CC_DATA = {
     // ==========================================
     categories: [
         { key: "Travel and carrier", label: "Travel & Carrier", icon: "🎒", slug: "pet-cargo-travel-carrier", image: "assets/banner2.jpg",
-          title: "Pet Cargo & Tas Travel Sugar Glider",
+          title: "Pet Cargo & Tas Travel Sugar Glider dan Hamster",
           intro: "Koleksi pet cargo, travel carrier, sling bag, dan backpack untuk membawa sugar glider, hamster, dan hewan kecil lainnya bepergian dengan aman. Semua dilengkapi ventilasi udara, dan sebagian besar sudah termasuk botol minum mini 60 ml — cocok untuk jalan-jalan, gathering, mudik, maupun ke dokter hewan." },
         { key: "Feeding Supplies", label: "Makan & Minum", icon: "🍽️", slug: "tempat-makan-minum", image: "assets/banner3.jpg",
           title: "Tempat Makan, Botol Minum & Spet Sugar Glider",

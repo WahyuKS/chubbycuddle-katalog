@@ -15,6 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const D = require('./data.js');
+const GUIDES = fs.existsSync(path.join(__dirname, 'panduan.js')) ? require('./panduan.js') : [];
 
 const ROOT = __dirname;
 const SITE = D.siteUrl.replace(/\/$/, '');
@@ -159,6 +160,9 @@ async function buildImages() {
         }
     }
     put(D.logo, await optimise(D.logo, 'logo-chubbycuddle', [96, 192, 512], { quality: 88 }));
+    for (const g of GUIDES) {
+        if (g.image) put(g.image, await optimise(g.image, 'panduan-' + g.slug, [480, 1000], { og: true }));
+    }
 
     // favicon & apple-touch-icon
     const logoFile = path.join(ROOT, D.logo);
@@ -250,6 +254,7 @@ function header(active = '') {
     const nav = [
         ['/#katalog', 'Katalog', 'katalog'],
         ['/#kategori', 'Kategori', 'kategori'],
+        ...(GUIDES.length ? [['/panduan/', 'Panduan', 'panduan']] : []),
         ['/#testimoni', 'Testimoni', 'testimoni'],
         ['/#faq', 'FAQ', 'faq']
     ];
@@ -296,7 +301,11 @@ function footer() {
         <li><a href="/#faq">FAQ &amp; Pengiriman</a></li>
         <li><a href="/#tentang">Tentang ${esc(D.brandName)}</a></li>
       </ul>
-    </div>
+    </div>${GUIDES.length ? `
+    <div>
+      <h2 class="footer-title">Panduan</h2>
+      <ul>${GUIDES.map(g => `<li><a href="/panduan/${g.slug}/">${esc(g.metaTitle.replace(/\s*[(:–].*$/, ''))}</a></li>`).join('')}</ul>
+    </div>` : ''}
     <div>
       <h2 class="footer-title">Hubungi Kami</h2>
       <ul>
@@ -543,7 +552,14 @@ ${header()}
     </div>
   </section>
 
-  <section class="section section-alt" id="faq" aria-labelledby="faq-title">
+  ${GUIDES.length ? `<section class="section section-alt" id="panduan" aria-labelledby="guides-title">
+    <div class="container">
+      ${sectionHead('Panduan', 'Baru pelihara? <em>Mulai dari sini.</em>', 'guides-title', `<a class="link-more" href="/panduan/">Semua panduan ${ICON.arrow}</a>`)}
+      <div class="guide-grid">${GUIDES.slice(0, 3).map(guideCard).join('\n')}</div>
+    </div>
+  </section>` : ''}
+
+  <section class="section" id="faq" aria-labelledby="faq-title">
     <div class="container faq-wrap">
       ${sectionHead('FAQ', 'Pertanyaan yang <em>sering diajukan</em>', 'faq-title')}
       <div class="faq">
@@ -650,6 +666,10 @@ ${header()}
     ${sectionHead('Rekomendasi', 'Mungkin kamu <em>juga suka</em>', 'rel-title', `<a class="link-more" href="/kategori/${p.cat.slug}/">${esc(p.cat.label)} ${ICON.arrow}</a>`)}
     <div class="rail">${related.map(o => productCard(o)).join('\n')}</div>
   </section>` : ''}
+  ${(() => { const gs = guidesForProduct(p).slice(0, 3); return gs.length ? `<section class="section section-tight" aria-labelledby="guide-title">
+    ${sectionHead('Panduan', 'Tips &amp; <em>cara pakai</em>', 'guide-title')}
+    <div class="guide-grid">${gs.map(guideCard).join('\n')}</div>
+  </section>` : ''; })()}
 </main>
 <div class="buybar">
   <div><small>${esc(p.name)}</small><strong class="${p.price ? '' : 'price-ask'}">${esc(p.priceText)}</strong></div>
@@ -697,11 +717,186 @@ ${header('kategori')}
       <div class="grid">${list.map((p, i) => productCard(p, { priority: i < 2 })).join('\n')}</div>
     </div>
   </section>
+  ${(() => { const gs = GUIDES.filter(g => guideProducts(g).some(p => p.category === c.key)).slice(0, 3); return gs.length ? `<section class="section section-tight section-alt" aria-labelledby="guide-title">
+    <div class="container">
+      ${sectionHead('Panduan', 'Sebelum <em>membeli</em>', 'guide-title', `<a class="link-more" href="/panduan/">Semua panduan ${ICON.arrow}</a>`)}
+      <div class="guide-grid">${gs.map(guideCard).join('\n')}</div>
+    </div>
+  </section>` : ''; })()}
   <section class="section section-tight"><div class="container">${trustRow()}</div></section>
 </main>
 ${footer()}
 ${tail({ waMsg: `Hai ${D.brandName}! Saya mau tanya produk ${c.label}.` })}`;
     write(`kategori/${c.slug}/index.html`, html);
+}
+
+/* ---------------------------------------------------------- panduan (artikel SEO) */
+const productBySlug = Object.fromEntries(products.map(p => [p.slug, p]));
+const guideBySlug = Object.fromEntries(GUIDES.map(g => [g.slug, g]));
+const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const tglIndo = s => { const [y, m, d] = String(s).split('-').map(Number); return `${d} ${BULAN[m - 1]} ${y}`; };
+
+function linkify(html, where) {
+    return String(html).replace(/\[\[(produk|kategori|panduan|landing):([^|\]]+)\|([^\]]+)\]\]/g, (_, type, target, text) => {
+        let href = '';
+        if (type === 'produk') { if (!productBySlug[target]) throw new Error(`${where}: produk "${target}" tidak ada`); href = productBySlug[target].url; }
+        if (type === 'kategori') { if (!categories.some(c => c.slug === target)) throw new Error(`${where}: kategori "${target}" tidak ada`); href = `/kategori/${target}/`; }
+        if (type === 'panduan') { if (!guideBySlug[target]) throw new Error(`${where}: panduan "${target}" tidak ada`); href = `/panduan/${target}/`; }
+        if (type === 'landing') href = target;
+        return `<a href="${href}">${text}</a>`;
+    });
+}
+const guideProducts = g => [...new Set([...(g.sections || []).flatMap(s => s.products || []), ...(g.budget || []).map(b => b.slug)])]
+    .map(s => { if (!productBySlug[s]) throw new Error(`panduan ${g.slug}: produk "${s}" tidak ada`); return productBySlug[s]; });
+const readMinutes = g => Math.max(2, Math.round(plain([g.intro, ...(g.sections || []).map(s => s.html)].join(' ')).split(/\s+/).length / 200));
+const guidesForProduct = p => GUIDES.filter(g => guideProducts(g).includes(p));
+
+function guideCard(g) {
+    return `<a class="guide-card" href="/panduan/${g.slug}/">
+  <span class="guide-media">${g.image ? img(g.image, { alt: g.title, small: 'w480', large: 'w1000', sizes: '(max-width: 640px) 85vw, 380px' }) : ''}</span>
+  <span class="guide-body"><small>${readMinutes(g)} menit baca</small><strong>${esc(g.title)}</strong><span class="guide-more">Baca panduan ${ICON.arrow}</span></span>
+</a>`;
+}
+
+function buildGuide(g) {
+    const url = `/panduan/${g.slug}/`;
+    const crumbs = [{ name: 'Beranda', url: '/' }, { name: 'Panduan', url: '/panduan/' }, { name: g.metaTitle.replace(/\s*[(:–].*$/, ''), url }];
+    const cover = g.image ? imgMap[g.image] : null;
+    const sections = g.sections || [];
+    const ids = sections.map(s => slugify(s.h2.replace(/^\d+\.\s*/, '')));
+    const budgetItems = (g.budget || []).map(b => ({ ...b, p: productBySlug[b.slug] })).filter(b => b.p && b.p.price);
+    const budgetTotal = budgetItems.reduce((n, b) => n + b.p.price, 0);
+    const budgetMsg = `Hai ${D.brandName}! Saya mau pesan paket perlengkapan awal:\n${budgetItems.map(b => `- ${b.p.name} (${b.p.priceText})`).join('\n')}\nTotal ${rupiah(budgetTotal)}. Apakah semua ready?`;
+    const others = GUIDES.filter(o => o !== g).slice(0, 3);
+    const toc = [...sections.map((s, i) => [ids[i], s.h2]), ...(budgetItems.length ? [['estimasi-budget', 'Estimasi budget']] : []), ...((g.faqs || []).length ? [['faq', 'Pertanyaan umum']] : [])];
+
+    const html = head({
+        title: `${g.metaTitle} | ${D.brandName}`.length <= 70 ? `${g.metaTitle} | ${D.brandName}` : g.metaTitle,
+        description: metaDesc(g.description),
+        canonical: SITE + url,
+        ogImage: SITE + (cover && cover.og ? cover.og : imgMap[D.heroImage].og),
+        ogType: 'article',
+        jsonld: [
+            { '@context': 'https://schema.org', '@type': 'Article', headline: g.title, description: g.description,
+              image: cover ? [SITE + (cover.og || cover.w1000)] : undefined,
+              datePublished: g.published, dateModified: g.updated || g.published, inLanguage: 'id-ID',
+              author: { '@type': 'Organization', name: D.brandName, url: SITE + '/' }, publisher: { '@id': ORG_ID },
+              mainEntityOfPage: SITE + url, about: g.keyword },
+            ...((g.faqs || []).length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage',
+              mainEntity: g.faqs.map(f => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
+            breadcrumbLd(crumbs)
+        ]
+    }) + `
+<body class="page-guide">
+${header('panduan')}
+<main>
+  <article>
+    <header class="guide-hero">
+      <div class="container guide-narrow">
+        ${breadcrumbs(crumbs)}
+        <p class="eyebrow">Panduan</p>
+        <h1>${esc(g.title)}</h1>
+        <p class="guide-lead">${esc(g.intro)}</p>
+        <p class="guide-meta"><span>Oleh Tim ${esc(D.brandName)}</span><span>Diperbarui ${tglIndo(g.updated || g.published)}</span><span>${readMinutes(g)} menit baca</span></p>
+      </div>
+      ${cover ? `<div class="container guide-cover">${img(g.image, { alt: g.title, small: 'w480', large: 'w1000', sizes: '(max-width: 960px) 100vw, 1000px', lazy: false, priority: true })}</div>` : ''}
+    </header>
+
+    <div class="container guide-layout">
+      <aside class="toc" aria-label="Daftar isi">
+        <details open><summary>Daftar isi</summary>
+          <ol>${toc.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a></li>`).join('')}</ol>
+        </details>
+      </aside>
+      <div class="prose">
+        ${sections.map((s, i) => {
+            const prods = (s.products || []).map(slug => productBySlug[slug]).filter(Boolean);
+            return `<section id="${ids[i]}">
+          <h2>${esc(s.h2)}</h2>
+          ${linkify(s.html, `panduan ${g.slug}`)}
+          ${prods.length ? `<div class="inline-products"><p class="inline-label">Produk terkait</p><div class="rail rail-sm">${prods.map(p => productCard(p)).join('\n')}</div></div>` : ''}
+        </section>`;
+        }).join('\n        ')}
+
+        ${budgetItems.length ? `<section id="estimasi-budget">
+          <h2>Estimasi budget perlengkapan awal</h2>
+          <p>Perkiraan biaya perlengkapan dasar (di luar kandang dan makanan) berdasarkan harga di ${esc(D.brandName)} saat artikel ini diperbarui:</p>
+          <div class="budget">
+            <table>
+              <thead><tr><th>Perlengkapan</th><th>Harga</th></tr></thead>
+              <tbody>${budgetItems.map(b => `<tr><td><a href="${b.p.url}">${esc(b.p.name)}</a><small>${esc(b.note || '')}</small></td><td>${esc(b.p.priceText)}</td></tr>`).join('')}</tbody>
+              <tfoot><tr><td>Total</td><td>${rupiah(budgetTotal)}</td></tr></tfoot>
+            </table>
+            <a class="btn btn-dark btn-lg btn-block" href="${waLink(budgetMsg)}" data-wa="${esc(budgetMsg)}" data-track="guide_bundle" data-product="Paket ${esc(g.keyword)}" data-value="${budgetTotal}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> Pesan paket ini via WhatsApp</a>
+            <p class="budget-note">Harga dapat berubah sewaktu-waktu. Admin akan mengonfirmasi stok dan ongkir sebelum pembayaran.</p>
+          </div>
+        </section>` : ''}
+
+        ${(g.faqs || []).length ? `<section id="faq">
+          <h2>Pertanyaan umum</h2>
+          <div class="faq">${g.faqs.map(f => `<details><summary>${esc(f.q)}</summary><div class="faq-a"><p>${esc(f.a)}</p></div></details>`).join('')}</div>
+        </section>` : ''}
+
+        <p class="disclaimer">Artikel ini bersifat informasi umum. Untuk kondisi kesehatan, pengobatan, atau kebutuhan nutrisi khusus, selalu konsultasikan dengan dokter hewan eksotik.</p>
+      </div>
+    </div>
+  </article>
+
+  <section class="section section-tight">
+    <div class="container">
+      <div class="cta-card">
+        <div><p class="eyebrow">Butuh bantuan memilih?</p><h2>Tanya admin, gratis.</h2><p>Ceritakan kebutuhan si kecil — kami bantu rekomendasikan perlengkapan yang pas.</p></div>
+        <a class="btn btn-light btn-lg" href="${waLink(`Hai ${D.brandName}! Saya baru baca panduan "${g.metaTitle}" dan mau tanya produk.`)}" data-wa="Hai ${esc(D.brandName)}! Saya baru baca panduan &quot;${esc(g.metaTitle)}&quot; dan mau tanya produk." data-track="guide_cta" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> Chat via WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  ${others.length ? `<section class="section section-alt section-tight" aria-labelledby="more-guides">
+    <div class="container">
+      ${sectionHead('Baca juga', 'Panduan <em>lainnya</em>', 'more-guides', `<a class="link-more" href="/panduan/">Semua panduan ${ICON.arrow}</a>`)}
+      <div class="guide-grid">${others.map(guideCard).join('\n')}</div>
+    </div>
+  </section>` : ''}
+</main>
+${footer()}
+${tail({ waMsg: `Hai ${D.brandName}! Saya mau tanya soal ${g.keyword}.` })}`;
+    write(`panduan/${g.slug}/index.html`, html);
+}
+
+function buildGuideIndex() {
+    if (!GUIDES.length) return;
+    const url = '/panduan/';
+    const crumbs = [{ name: 'Beranda', url: '/' }, { name: 'Panduan', url }];
+    const html = head({
+        title: `Panduan Merawat Sugar Glider & Hewan Kecil | ${D.brandName}`,
+        description: metaDesc(`Kumpulan panduan dari ${D.brandName}: perlengkapan sugar glider untuk pemula, cara merawat, makanan, cara memberi susu, memilih pet cargo, dan perlengkapan hamster.`),
+        canonical: SITE + url,
+        ogImage: SITE + imgMap[D.heroImage].og,
+        jsonld: [
+            { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Panduan ' + D.brandName, url: SITE + url,
+              isPartOf: { '@id': SITE + '/#website' },
+              mainEntity: { '@type': 'ItemList', itemListElement: GUIDES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/panduan/${g.slug}/`, name: g.title })) } },
+            breadcrumbLd(crumbs)
+        ]
+    }) + `
+<body class="page-category">
+${header('panduan')}
+<main>
+  <section class="cat-hero">
+    <div class="container">
+      ${breadcrumbs(crumbs)}
+      <p class="eyebrow">Panduan</p>
+      <h1>Panduan merawat <em>sugar glider</em> &amp; hewan kecil</h1>
+      <p>Tips praktis dari tim ${esc(D.brandName)} — dari perlengkapan untuk pemula, makanan, cara memberi susu, sampai memilih pet cargo yang aman.</p>
+    </div>
+  </section>
+  <section class="section section-tight">
+    <div class="container"><div class="guide-grid">${GUIDES.map(guideCard).join('\n')}</div></div>
+  </section>
+</main>
+${footer()}
+${tail()}`;
+    write('panduan/index.html', html);
 }
 
 function build404() {
@@ -726,10 +921,10 @@ ${tail()}`;
 }
 
 function buildSitemap() {
-    const urls = ['/', ...categories.map(c => `/kategori/${c.slug}/`), ...sortDefault(products).map(p => p.url)];
+    const urls = ['/', ...categories.map(c => `/kategori/${c.slug}/`), ...(GUIDES.length ? ['/panduan/', ...GUIDES.map(g => `/panduan/${g.slug}/`)] : []), ...sortDefault(products).map(p => p.url)];
     // landing page lain di repo (folder berisi index.html, mis. /spet-mini-brush/)
     fs.readdirSync(ROOT, { withFileTypes: true })
-        .filter(d => d.isDirectory() && !['produk', 'kategori', 'assets', 'node_modules', '.git', '.github'].includes(d.name) && !d.name.startsWith('.'))
+        .filter(d => d.isDirectory() && !['produk', 'kategori', 'panduan', 'assets', 'node_modules', '.git', '.github'].includes(d.name) && !d.name.startsWith('.'))
         .filter(d => fs.existsSync(path.join(ROOT, d.name, 'index.html')))
         .forEach(d => urls.push(`/${d.name}/`));
     const imgsFor = u => {
@@ -747,7 +942,7 @@ ${urls.map(u => `  <url>\n    <loc>${SITE}${u}</loc>${imgsFor(u)}\n  </url>`).jo
 
 function cleanStale() {
     // hapus halaman produk/kategori yang sudah tidak ada di data.js
-    for (const [dir, valid] of [['produk', products.map(p => p.slug)], ['kategori', categories.map(c => c.slug)]]) {
+    for (const [dir, valid] of [['produk', products.map(p => p.slug)], ['kategori', categories.map(c => c.slug)], ['panduan', ['index.html', ...GUIDES.map(g => g.slug)]]]) {
         const d = path.join(ROOT, dir);
         if (!fs.existsSync(d)) continue;
         for (const e of fs.readdirSync(d)) if (!valid.includes(e)) fs.rmSync(path.join(d, e), { recursive: true, force: true });
@@ -761,7 +956,9 @@ function cleanStale() {
     buildHome();
     products.forEach(buildProduct);
     categories.forEach(buildCategory);
+    GUIDES.forEach(buildGuide);
+    buildGuideIndex();
     build404();
     buildSitemap();
-    console.log(`✓ Selesai: 1 beranda, ${products.length} produk, ${categories.length} kategori, sitemap.xml`);
+    console.log(`✓ Selesai: 1 beranda, ${products.length} produk, ${categories.length} kategori, ${GUIDES.length} panduan, sitemap.xml`);
 })().catch(e => { console.error(e); process.exit(1); });
