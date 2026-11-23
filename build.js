@@ -946,6 +946,8 @@ ${urls.map(u => `  <url>\n    <loc>${SITE}${u}</loc>${imgsFor(u)}\n  </url>`).jo
  * - Produk tanpa harga ("Tanya Admin") tidak dimasukkan (Google wajib ada harga).
  * - Produk dengan beberapa warna -> 1 item per warna, dikelompokkan dengan item_group_id.
  */
+// penanda agar pesan WA dari Google Shopping tercatat sumbernya
+const FEED_UTM = 'utm_source=google_shopping&utm_medium=free_listing';
 const GOOGLE_CATEGORY = 'Animals & Pet Supplies > Pet Supplies > Small Animal Supplies';
 function buildFeed() {
     const x = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[c]));
@@ -964,11 +966,11 @@ function buildFeed() {
             variants.forEach(v => items.push({
                 ...base, id: `${p.sku}-${slugify(v.variant)}`.toUpperCase(), item_group_id: p.sku,
                 title: `${p.name} - ${v.variant}`, color: v.variant,
-                link: `${SITE}${p.url}?warna=${encodeURIComponent(v.variant)}`,
+                link: `${SITE}${p.url}?warna=${encodeURIComponent(v.variant)}&${FEED_UTM}`,
                 image: imgUrl(v.src), extra: p.images.filter(o => o !== v).slice(0, 10).map(o => imgUrl(o.src))
             }));
         } else {
-            items.push({ ...base, id: p.sku, link: SITE + p.url, image: imgUrl(p.images[0].src),
+            items.push({ ...base, id: p.sku, link: `${SITE}${p.url}?${FEED_UTM}`, image: imgUrl(p.images[0].src),
                 extra: p.images.slice(1, 11).map(o => imgUrl(o.src)), color: variants[0] ? variants[0].variant : '' });
         }
     }

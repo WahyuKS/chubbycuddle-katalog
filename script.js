@@ -29,7 +29,8 @@
     }
     var SRC = adSource();
     function waHref(msg) {
-        var text = SRC ? msg + '\n\n(Info: dari iklan ' + SRC + ')' : msg;
+        var label = /^google_shopping/.test(SRC) ? 'Google Shopping' : 'iklan ' + SRC;
+        var text = SRC ? msg + '\n\n(Info: dari ' + label + ')' : msg;
         return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(text);
     }
     function refreshWaLinks(root) {
