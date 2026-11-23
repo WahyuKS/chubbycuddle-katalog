@@ -1,0 +1,46 @@
+name: Build website
+
+# Setiap kali data.js / build.js / CSS / JS / gambar di-push ke main,
+# workflow ini menjalankan `npm run build` lalu meng-commit hasilnya
+# (index.html, halaman produk/kategori, sitemap, gambar WebP).
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data.js'
+      - 'build.js'
+      - 'style.css'
+      - 'script.js'
+      - 'assets/**'
+      - '!assets/img/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Commit hasil build
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Tidak ada perubahan."
+          else
+            git commit -m "chore: build website otomatis"
+            git push
+          fi
