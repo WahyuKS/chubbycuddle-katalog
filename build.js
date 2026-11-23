@@ -425,6 +425,8 @@ function buildHome() {
         title: `${D.brandName} — Toko Perlengkapan Sugar Glider ${D.city}`,
         description: metaDesc(`${D.brandName}: pet cargo, tas travel, mangkuk keramik, spet & mainan sugar glider mulai ${rupiah(minPrice)}.`, ` Gratis ongkir area ${D.city}, kirim se-Indonesia.`),
         canonical: SITE + '/',
+        extraHead: `<script>/* link lama ?produk=SKU (katalog Meta / bot WA) -> halaman produk */(function(){try{var m=${JSON.stringify(Object.fromEntries(products.map(p => [p.sku, p.url])))};var q=new URLSearchParams(location.search),k=(q.get('produk')||'').toUpperCase();if(k&&m[k]){q.delete('produk');var r=q.toString();location.replace(m[k]+(r?'?'+r:''));}}catch(e){}})();</script>
+`,
         ogImage: SITE + hero.og,
         jsonld,
         preloadImg: `<link rel="preload" as="image" href="${hero.w800}" imagesrcset="${hero.w800} 800w, ${hero.w1400} 1400w" imagesizes="(max-width: 900px) 100vw, 640px" fetchpriority="high">\n`
@@ -625,7 +627,7 @@ function buildProduct(p) {
         extraHead: p.price > 0 ? `<meta property="product:price:amount" content="${p.price}">\n<meta property="product:price:currency" content="IDR">\n` : '',
         preloadImg: cover ? `<link rel="preload" as="image" href="${cover.w800}" imagesrcset="${cover.w400} 400w, ${cover.w800} 800w" imagesizes="(max-width: 900px) 100vw, 560px" fetchpriority="high">\n` : ''
     }) + `
-<body class="page-product" data-product="${esc(p.name)}" data-category="${esc(p.category)}" data-value="${p.price}">
+<body class="page-product" data-sku="${esc(p.sku)}" data-product="${esc(p.name)}" data-category="${esc(p.category)}" data-value="${p.price}">
 ${header()}
 <main class="container">
   ${breadcrumbs(crumbs)}
@@ -647,8 +649,8 @@ ${header()}
         <div class="variant-list">${p.images.map((im, k) => im.variant ? `<button type="button" class="variant${k === 0 ? ' is-active' : ''}" data-go="${k}" data-variant="${esc(im.variant)}"><span style="background:${COLOR_HEX[im.variant] || '#E2E8F0'}"></span>${esc(im.variant)}</button>` : '').join('')}</div>
       </div>` : ''}
       <div class="pdp-actions">
-        <a class="btn btn-dark btn-lg btn-block" id="order-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="pdp_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> ${p.soldOut ? 'Tanya restock via WhatsApp' : 'Pesan via WhatsApp'}</a>
-        <a class="btn btn-outline btn-block" href="${waLink(`Hai ${D.brandName}! Saya mau tanya dulu soal ${p.name}.`)}" data-wa="Hai ${esc(D.brandName)}! Saya mau tanya dulu soal ${esc(p.name)}." data-track="pdp_ask" target="_blank" rel="noopener">Tanya dulu ke admin</a>
+        <a class="btn btn-dark btn-lg btn-block" id="order-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="pdp_order" data-sku="${esc(p.sku)}" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> ${p.soldOut ? 'Tanya restock via WhatsApp' : 'Pesan via WhatsApp'}</a>
+        <a class="btn btn-outline btn-block" href="${waLink(`Hai ${D.brandName}! Saya mau tanya dulu soal ${p.name}.`)}" data-wa="Hai ${esc(D.brandName)}! Saya mau tanya dulu soal ${esc(p.name)}." data-track="pdp_ask" data-sku="${esc(p.sku)}" target="_blank" rel="noopener">Tanya dulu ke admin</a>
       </div>
       <ul class="pdp-perks">
         <li>${ICON.truck} Gratis ongkir area tertentu di ${esc(D.city)} · JNE/J&amp;T ke seluruh Indonesia</li>
@@ -673,7 +675,7 @@ ${header()}
 </main>
 <div class="buybar">
   <div><small>${esc(p.name)}</small><strong class="${p.price ? '' : 'price-ask'}">${esc(p.priceText)}</strong></div>
-  <a class="btn btn-dark" id="buybar-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="buybar_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> ${p.soldOut ? 'Tanya restock' : 'Pesan sekarang'}</a>
+  <a class="btn btn-dark" id="buybar-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="buybar_order" data-sku="${esc(p.sku)}" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> ${p.soldOut ? 'Tanya restock' : 'Pesan sekarang'}</a>
 </div>
 ${footer()}
 ${tail({ floatingWa: false })}`;

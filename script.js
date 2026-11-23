@@ -44,6 +44,9 @@
         var info = { content_name: a.getAttribute('data-product') || a.getAttribute('data-track') || 'whatsapp' };
         var v = parseInt(a.getAttribute('data-value') || '0', 10);
         if (v > 0) { info.value = v; info.currency = 'IDR'; }
+        // ID produk = retailer_id di katalog Meta (untuk iklan katalog / retargeting)
+        var sku = a.getAttribute('data-sku');
+        if (sku) { info.content_ids = [sku]; info.content_type = 'product'; }
         track('Lead', info);
         track('Contact', info);
     });
@@ -221,6 +224,7 @@
         var body = document.body;
         var value = parseInt(body.getAttribute('data-value') || '0', 10);
         track('ViewContent', {
+            content_ids: [body.getAttribute('data-sku')],
             content_name: body.getAttribute('data-product'),
             content_category: body.getAttribute('data-category'),
             content_type: 'product',
