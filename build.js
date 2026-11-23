@@ -57,6 +57,8 @@ const COLOR_HEX = {
     Oranye: '#FDBA74', Hitam: '#334155', Kuning: '#FDE68A', Army: '#7C8B5A', 'Full Pink': '#EC4899',
     'Blue Panda': '#60A5FA', 'Pink Sugar Glider': '#F472B6', Merah: '#F87171', 'Abu-abu': '#CBD5E1'
 };
+// emoji dekoratif yang disembunyikan di deskripsi halaman produk (📏 🎨 🥤 ✅ tetap tampil sebagai penanda)
+const DECOR_EMOJI = /(?:💕|💙|💚|❤️|❤|💛|🖤|🤍|🐿️|🐿|🐶|🐱|🐹|🐾|🚗|📚|✨)️?/gu;
 
 /* ---------------------------------------------------------- normalise data */
 const catByKey = {};
@@ -230,7 +232,7 @@ fbq('init','${D.metaPixelId}');fbq('track','PageView');
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 ${preloadImg}<link rel="stylesheet" href="/style.css?v=${ASSET_VERSION}">
 ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j).replace(/</g, '\\u003c')}</script>`).join('\n')}
 ${extraHead}${pixel}
@@ -245,17 +247,17 @@ function header(active = '') {
         ['/#faq', 'FAQ', 'faq']
     ];
     return `
-<div class="announce">🚚 <strong>Gratis ongkir</strong> area tertentu di Batam · Kirim ke seluruh Indonesia via JNE &amp; J&amp;T</div>
+<div class="announce"><span>Gratis ongkir area tertentu di ${esc(D.city)}</span><span class="announce-sep" aria-hidden="true"></span><span>Pengiriman ke seluruh Indonesia</span></div>
 <header class="site-header" id="top">
   <div class="container header-inner">
     <a href="/" class="brand" aria-label="${esc(D.brandName)} — Beranda">
       <img src="${imgMap[D.logo] ? imgMap[D.logo].w96 : '/' + D.logo}" width="44" height="44" alt="Logo ${esc(D.brandName)}">
-      <span class="brand-text"><span class="brand-name">${esc(D.brandName)}</span><span class="brand-tag">Sugar Glider Essentials</span></span>
+      <span class="brand-text"><span class="brand-name">${esc(D.brandName)}</span><span class="brand-tag">Sugar glider essentials</span></span>
     </a>
     <nav class="main-nav" id="main-nav" aria-label="Menu utama">
       ${nav.map(([href, label, key]) => `<a href="${href}"${active === key ? ' aria-current="page"' : ''}>${label}</a>`).join('\n      ')}
     </nav>
-    <a class="btn btn-wa btn-sm header-wa" href="${waLink(`Hai ${D.brandName}! Saya mau tanya produk.`)}" data-wa="Hai ${esc(D.brandName)}! Saya mau tanya produk." data-track="header" target="_blank" rel="noopener">${ICON.wa}<span>Chat Admin</span></a>
+    <a class="btn btn-dark btn-sm header-wa" href="${waLink(`Hai ${D.brandName}! Saya mau tanya produk.`)}" data-wa="Hai ${esc(D.brandName)}! Saya mau tanya produk." data-track="header" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span><span>Chat</span></a>
     <button class="nav-toggle" id="nav-toggle" aria-label="Buka menu" aria-expanded="false" aria-controls="main-nav">${ICON.menu}</button>
   </div>
 </header>`;
@@ -304,7 +306,7 @@ function footer() {
 function tail({ floatingWa = true, waMsg } = {}) {
     const msg = waMsg || `Hai ${D.brandName}! Saya butuh bantuan memilih produk.`;
     return `${floatingWa ? `
-<a class="wa-float" href="${waLink(msg)}" data-wa="${esc(msg)}" data-track="floating" target="_blank" rel="noopener" aria-label="Chat WhatsApp">${ICON.wa}<span>Chat</span></a>` : ''}
+<a class="wa-float" href="${waLink(msg)}" data-wa="${esc(msg)}" data-track="floating" target="_blank" rel="noopener" aria-label="Chat WhatsApp">${ICON.wa}<span>Tanya admin</span></a>` : ''}
 <script>window.CC_WA=${JSON.stringify(D.whatsappNumber)};</script>
 <script src="/script.js?v=${ASSET_VERSION}" defer></script>
 </body>
@@ -315,10 +317,7 @@ function tail({ floatingWa = true, waMsg } = {}) {
 /* ---------------------------------------------------------- components */
 function productCard(p, { priority = false } = {}) {
     const cover = p.images[0];
-    const orderMsg = p.soldOut
-        ? `Hai ${D.brandName}! Kapan ${p.name} restock?`
-        : `Hai ${D.brandName}! Saya mau pesan ${p.name}${p.price ? ' (' + p.priceText + ')' : ''}. Apakah stok masih ready?`;
-    const badge = p.soldOut ? '<span class="badge badge-soldout">Stok Habis</span>'
+    const badge = p.soldOut ? '<span class="badge badge-soldout">Stok habis</span>'
         : p.bestSeller ? '<span class="badge badge-best">Best Seller</span>' : '';
     const swatches = p.variants.length > 1
         ? `<div class="swatches" aria-label="${p.variants.length} pilihan warna">${p.variants.slice(0, 5).map(v => `<span style="background:${COLOR_HEX[v] || '#E2E8F0'}" title="${esc(v)}"></span>`).join('')}<small>${p.variants.length} warna</small></div>` : '';
@@ -328,12 +327,10 @@ function productCard(p, { priority = false } = {}) {
     ${badge}
   </a>
   <div class="card-body">
-    <span class="card-cat">${esc(p.cat.label)}</span>
     <h3 class="card-title"><a href="${p.url}">${esc(p.name)}</a></h3>
-    ${swatches}
     <div class="card-foot">
       <span class="price${p.price ? '' : ' price-ask'}">${esc(p.priceText)}</span>
-      <a class="btn-icon-wa" href="${waLink(orderMsg)}" data-wa="${esc(orderMsg)}" data-track="card_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener" aria-label="${p.soldOut ? 'Tanya restock' : 'Pesan'} ${esc(p.name)} via WhatsApp">${ICON.wa}</a>
+      ${swatches}
     </div>
   </div>
 </article>`;
@@ -351,12 +348,14 @@ function breadcrumbLd(items) {
 
 function trustRow() {
     return `<ul class="trust">
-  <li>${ICON.box}<div><strong>Dicek sebelum kirim</strong><span>Dikemas rapi &amp; aman</span></div></li>
-  <li>${ICON.truck}<div><strong>Kirim seluruh Indonesia</strong><span>JNE &amp; J&amp;T Express</span></div></li>
-  <li>${ICON.chat}<div><strong>Konsultasi gratis</strong><span>Tanya dulu via WhatsApp</span></div></li>
-  <li>${ICON.check}<div><strong>Dibantu jika bermasalah</strong><span>Sertakan video unboxing</span></div></li>
+  <li><span class="trust-ic">${ICON.box}</span><div><strong>Dicek sebelum dikirim</strong><span>Setiap pesanan diperiksa dan dikemas rapi.</span></div></li>
+  <li><span class="trust-ic">${ICON.truck}</span><div><strong>Seluruh Indonesia</strong><span>Antar di ${esc(D.city)}, JNE &amp; J&amp;T ke luar kota.</span></div></li>
+  <li><span class="trust-ic">${ICON.chat}</span><div><strong>Konsultasi gratis</strong><span>Tanya ukuran &amp; kecocokan sebelum beli.</span></div></li>
+  <li><span class="trust-ic">${ICON.check}</span><div><strong>Dibantu jika bermasalah</strong><span>Cukup sertakan video unboxing.</span></div></li>
 </ul>`;
 }
+const sectionHead = (label, title, id, extra = '') =>
+    `<div class="section-head${extra ? ' row' : ''}"><div><p class="eyebrow">${label}</p><h2 id="${id}">${title}</h2></div>${extra}</div>`;
 
 const ORG_ID = SITE + '/#organization';
 const orgLd = {
@@ -395,7 +394,7 @@ function buildHome() {
         return `<figure class="testi">
   ${imgs.length ? `<div class="testi-photos n${Math.min(imgs.length, 2)}">${imgs.slice(0, 2).map((s, k) => `<button type="button" class="testi-photo" data-full="${imgMap[s] ? imgMap[s].w1000 : '/' + s}" aria-label="Perbesar foto testimoni ${esc(t.name)}">${img(s, { alt: `Testimoni ${t.name} ${k + 1}`, small: 'w480', large: 'w480', sizes: '240px' })}</button>`).join('')}</div>` : ''}
   <div class="stars" aria-label="5 dari 5">${ICON.star.repeat(5)}</div>
-  ${t.text ? `<blockquote>“${esc(t.text)}”</blockquote>` : ''}
+  ${t.text ? `<blockquote>${esc(t.text)}</blockquote>` : ''}
   <figcaption><span class="avatar">${esc(initials)}</span><span><strong>${esc(t.name)}</strong>${t.product ? `<small>Membeli: ${esc(t.product)}</small>` : ''}</span></figcaption>
 </figure>`;
     }).join('\n');
@@ -414,34 +413,31 @@ ${header()}
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">🐾 Toko sugar glider dari ${esc(D.city)}</p>
-        <h1><span class="h1-brand">${esc(D.brandName)}</span> Perlengkapan Sugar Glider yang Lucu &amp; Aman</h1>
-        <p class="hero-sub">Pet cargo, tas travel, mangkuk keramik, spet, dan mainan pilihan untuk sugar glider &amp; hewan kecil. Pesan langsung lewat WhatsApp, dibalas cepat oleh admin.</p>
+        <p class="pill"><span class="pulse" aria-hidden="true"></span>Dikirim dari ${esc(D.city)} ke seluruh Indonesia</p>
+        <h1><span class="h1-brand">${esc(D.brandName)}</span>Perlengkapan sugar glider untuk si kecil yang <em>istimewa.</em></h1>
+        <p class="hero-sub">Pet cargo, tas travel, mangkuk keramik, dan aksesori pilihan — aman, praktis, dan tampil cantik. Pesan langsung lewat WhatsApp.</p>
         <div class="hero-cta">
-          <a href="#katalog" class="btn btn-primary btn-lg">Lihat Katalog ${ICON.arrow}</a>
-          <a href="${waLink(`Hai ${D.brandName}! Saya butuh bantuan memilih produk.`)}" data-wa="Hai ${esc(D.brandName)}! Saya butuh bantuan memilih produk." data-track="hero" class="btn btn-wa btn-lg" target="_blank" rel="noopener">${ICON.wa} Chat Admin</a>
+          <a href="#katalog" class="btn btn-dark btn-lg">Belanja sekarang ${ICON.arrow}</a>
+          <a href="${waLink(`Hai ${D.brandName}! Saya butuh bantuan memilih produk.`)}" data-wa="Hai ${esc(D.brandName)}! Saya butuh bantuan memilih produk." data-track="hero" class="btn btn-outline btn-lg" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> Tanya admin</a>
         </div>
         <ul class="hero-points">
-          <li><strong>${products.length}+</strong> produk</li>
-          <li><strong>Gratis ongkir</strong> area ${esc(D.city)}*</li>
-          <li><strong>JNE &amp; J&amp;T</strong> seluruh Indonesia</li>
+          <li>${ICON.box}<span>Dicek sebelum dikirim</span></li>
+          <li>${ICON.truck}<span>JNE &amp; J&amp;T Express</span></li>
+          <li>${ICON.chat}<span>Konsultasi gratis</span></li>
         </ul>
       </div>
       <div class="hero-visual">
         <div class="hero-img">
           <img src="${hero.w800}" srcset="${hero.w800} 800w, ${hero.w1400} 1400w" sizes="(max-width: 900px) 100vw, 640px" width="${hero.dispW}" height="${hero.dispH}" alt="Koleksi perlengkapan sugar glider ${esc(D.brandName)}: pet cargo, mangkuk keramik, dan travel carrier" fetchpriority="high" decoding="async">
         </div>
-        ${best[0] ? `<a class="hero-chip" href="${best[0].url}">${img(best[0].images[0].src, { alt: '', small: 'w400', large: 'w400', sizes: '56px' })}<span><small>Best Seller</small><strong>${esc(best[0].name)}</strong><em>${esc(best[0].priceText)}</em></span></a>` : ''}
+        ${best[0] ? `<a class="hero-chip" href="${best[0].url}">${img(best[0].images[0].src, { alt: '', small: 'w400', large: 'w400', sizes: '56px' })}<span><small>Best Seller</small><strong>${esc(best[0].name)}</strong><em>${esc(best[0].priceText)}</em></span>${ICON.arrow}</a>` : ''}
       </div>
     </div>
   </section>
 
   <section class="section section-tight" aria-labelledby="best-title">
     <div class="container">
-      <div class="section-head row">
-        <div><p class="eyebrow">Paling dicari</p><h2 id="best-title">Best Seller Minggu Ini 🔥</h2></div>
-        <a href="#katalog" class="link-more">Semua produk ${ICON.arrow}</a>
-      </div>
+      ${sectionHead('Paling dicari', 'Best Seller', 'best-title', `<a href="#katalog" class="link-more">Lihat semua ${ICON.arrow}</a>`)}
       <div class="rail" tabindex="0" aria-label="Produk best seller">
         ${best.map((p, i) => productCard(p, { priority: i < 2 })).join('\n')}
       </div>
@@ -450,13 +446,14 @@ ${header()}
 
   <section class="section" id="kategori" aria-labelledby="cat-title">
     <div class="container">
-      <div class="section-head"><p class="eyebrow">Belanja sesuai kebutuhan</p><h2 id="cat-title">Kategori Produk</h2></div>
+      ${sectionHead('Koleksi', 'Belanja per <em>kategori</em>', 'cat-title')}
       <div class="cat-grid">
         ${categories.map(c => {
             const count = products.filter(p => p.category === c.key).length;
             return `<a class="cat-card" href="/kategori/${c.slug}/">
           ${c.image ? img(c.image, { alt: c.title, small: 'w480', large: 'w900', sizes: '(max-width: 640px) 50vw, 33vw' }) : ''}
-          <span class="cat-info"><span class="cat-icon">${c.icon || '🐾'}</span><strong>${esc(c.label)}</strong><small>${count} produk</small></span>
+          <span class="cat-go" aria-hidden="true">${ICON.arrow}</span>
+          <span class="cat-info"><strong>${esc(c.label)}</strong><small>${count} produk</small></span>
         </a>`;
         }).join('\n        ')}
       </div>
@@ -465,7 +462,7 @@ ${header()}
 
   <section class="section section-alt" id="katalog" aria-labelledby="catalog-title">
     <div class="container">
-      <div class="section-head"><p class="eyebrow">Katalog lengkap</p><h2 id="catalog-title">Belanja di ${esc(D.brandName)}</h2><p>Pilih produk, lalu pesan langsung via WhatsApp. Ketuk produk untuk lihat foto &amp; detail.</p></div>
+      ${sectionHead('Katalog', `Semua produk ${esc(D.brandName)}`, 'catalog-title')}
       <div class="catalog-tools">
         <label class="search">${ICON.search}<input type="search" id="search" placeholder="Cari produk…" aria-label="Cari produk"></label>
         <select id="sort" aria-label="Urutkan produk">
@@ -477,61 +474,65 @@ ${header()}
       </div>
       <div class="chips" role="tablist" aria-label="Filter kategori">
         <button class="chip is-active" data-filter="all" role="tab" aria-selected="true">Semua <span>${products.length}</span></button>
-        ${categories.map(c => `<button class="chip" data-filter="${esc(c.key)}" role="tab" aria-selected="false">${c.icon || ''} ${esc(c.label)} <span>${products.filter(p => p.category === c.key).length}</span></button>`).join('\n        ')}
+        ${categories.map(c => `<button class="chip" data-filter="${esc(c.key)}" role="tab" aria-selected="false">${esc(c.label)} <span>${products.filter(p => p.category === c.key).length}</span></button>`).join('\n        ')}
       </div>
       <p class="catalog-count" id="catalog-count" aria-live="polite">Menampilkan ${products.length} produk</p>
       <div class="grid" id="product-grid">
         ${sorted.map(p => productCard(p)).join('\n')}
       </div>
       <div class="empty" id="empty" hidden>
-        <p>Produk tidak ditemukan 😢</p>
-        <a class="btn btn-wa" href="${waLink(`Hai ${D.brandName}! Saya cari produk yang tidak ada di katalog.`)}" data-wa="Hai ${esc(D.brandName)}! Saya cari produk yang tidak ada di katalog." data-track="empty_search" target="_blank" rel="noopener">${ICON.wa} Tanya admin</a>
+        <p>Produk yang kamu cari belum ada di katalog.</p>
+        <a class="btn btn-dark" href="${waLink(`Hai ${D.brandName}! Saya cari produk yang tidak ada di katalog.`)}" data-wa="Hai ${esc(D.brandName)}! Saya cari produk yang tidak ada di katalog." data-track="empty_search" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> Tanya admin</a>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-label="Keunggulan">
-    <div class="container">${trustRow()}</div>
+  <section class="section section-dark" aria-labelledby="why-title">
+    <div class="container">
+      ${sectionHead(`Kenapa ${esc(D.brandName)}`, 'Belanja tenang, <em>si kecil senang.</em>', 'why-title')}
+      ${trustRow()}
+    </div>
   </section>
 
-  <section class="section section-alt" id="testimoni" aria-labelledby="testi-title"${testimonials ? '' : ' hidden'}>
+  <section class="section" id="testimoni" aria-labelledby="testi-title"${testimonials ? '' : ' hidden'}>
     <div class="container">
-      <div class="section-head"><p class="eyebrow">Kata pawparents</p><h2 id="testi-title">Testimoni Pembeli ${esc(D.brandName)}</h2></div>
+      ${sectionHead('Testimoni', 'Kata para <em>pawparents</em>', 'testi-title')}
       <div class="rail rail-testi">${testimonials}</div>
     </div>
   </section>
 
-  <section class="section" id="cara-pesan" aria-labelledby="how-title">
+  <section class="section section-alt" id="cara-pesan" aria-labelledby="how-title">
     <div class="container">
-      <div class="section-head"><p class="eyebrow">Gampang banget</p><h2 id="how-title">Cara Pesan di ${esc(D.brandName)}</h2></div>
+      ${sectionHead('Cara pesan', 'Empat langkah, <em>tanpa ribet.</em>', 'how-title')}
       <ol class="steps">
-        <li><span>1</span><strong>Pilih produk</strong><p>Cari di katalog dan pilih warna favoritmu.</p></li>
-        <li><span>2</span><strong>Chat WhatsApp</strong><p>Tekan tombol WhatsApp — pesan otomatis terisi.</p></li>
-        <li><span>3</span><strong>Konfirmasi &amp; bayar</strong><p>Admin cek stok, ongkir, lalu kirim instruksi bayar.</p></li>
-        <li><span>4</span><strong>Paket dikirim</strong><p>Diantar di ${esc(D.city)} atau via JNE/J&amp;T + resi.</p></li>
+        <li><span>01</span><strong>Pilih produk</strong><p>Buka produk dan pilih warna favoritmu.</p></li>
+        <li><span>02</span><strong>Chat WhatsApp</strong><p>Tekan tombol pesan — detail produk otomatis terisi.</p></li>
+        <li><span>03</span><strong>Konfirmasi &amp; bayar</strong><p>Admin cek stok dan ongkir, lalu kirim instruksi bayar.</p></li>
+        <li><span>04</span><strong>Paket dikirim</strong><p>Diantar di ${esc(D.city)} atau via JNE/J&amp;T lengkap dengan resi.</p></li>
       </ol>
       <div class="free-ship">
-        <strong>🎉 Gratis ongkir area ${esc(D.city)}:</strong> ${D.freeShippingAreas.map(esc).join(', ')}. <span>*Area sekitar? Tanyakan ke admin.</span>
+        <span class="trust-ic">${ICON.truck}</span>
+        <div><strong>Gratis ongkir area ${esc(D.city)}</strong><p>${D.freeShippingAreas.map(esc).join(' · ')}. Area sekitar? Tanyakan ke admin.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt" id="tentang" aria-labelledby="about-title">
+  <section class="section" id="tentang" aria-labelledby="about-title">
     <div class="container about">
-      <img src="${imgMap[D.logo].w512}" width="240" height="240" alt="Logo ${esc(D.brandName)}" loading="lazy" decoding="async">
+      <div class="about-logo"><img src="${imgMap[D.logo].w512}" width="240" height="240" alt="Logo ${esc(D.brandName)}" loading="lazy" decoding="async"></div>
       <div>
         <p class="eyebrow">Tentang kami</p>
         <h2 id="about-title">Tentang ${esc(D.brandName)}</h2>
-        <p><strong>${esc(D.brandName)}</strong> (Chubby Cuddle) adalah toko online perlengkapan dan aksesori <strong>sugar glider</strong> dari ${esc(D.city)}, ${esc(D.region)}. Kami menyediakan pet cargo, tas travel, sling bag, mangkuk keramik bersekat, botol minum kandang, spet untuk memberi susu, mainan, dan perlengkapan kebersihan kandang — dipilih supaya aman, praktis, dan tentu saja menggemaskan.</p>
+        <p><strong>${esc(D.brandName)}</strong> (Chubby Cuddle) adalah toko online perlengkapan dan aksesori <strong>sugar glider</strong> dari ${esc(D.city)}, ${esc(D.region)}. Kami menyediakan pet cargo, tas travel, sling bag, mangkuk keramik bersekat, botol minum kandang, spet untuk memberi susu, mainan, dan perlengkapan kebersihan kandang — dipilih supaya aman, praktis, dan tetap cantik dipandang.</p>
         <p>Banyak produk kami juga cocok untuk hamster dan hewan kecil lainnya. Semua pesanan dilayani langsung oleh admin lewat WhatsApp, diantar di area ${esc(D.city)} atau dikirim ke seluruh Indonesia melalui JNE dan J&amp;T Express.</p>
-        <p class="slogan">“${esc(D.slogan)}”</p>
+        <p class="slogan">${esc(D.slogan)}</p>
       </div>
     </div>
   </section>
 
-  <section class="section" id="faq" aria-labelledby="faq-title">
-    <div class="container narrow">
-      <div class="section-head"><p class="eyebrow">Ada pertanyaan?</p><h2 id="faq-title">Pertanyaan yang Sering Diajukan</h2></div>
+  <section class="section section-alt" id="faq" aria-labelledby="faq-title">
+    <div class="container faq-wrap">
+      ${sectionHead('FAQ', 'Pertanyaan yang <em>sering diajukan</em>', 'faq-title')}
       <div class="faq">
         ${D.faqs.map(f => `<details><summary>${esc(f.q)}</summary><div class="faq-a">${f.a}</div></details>`).join('\n        ')}
       </div>
@@ -541,8 +542,8 @@ ${header()}
   <section class="section section-tight">
     <div class="container">
       <div class="cta-card">
-        <div><h2>Bingung pilih yang cocok untuk si kecil?</h2><p>Ceritakan kebutuhan sugar glider kamu — admin bantu rekomendasikan produk yang pas.</p></div>
-        <a class="btn btn-wa btn-lg" href="${waLink(`Hai ${D.brandName}! Saya butuh rekomendasi produk untuk sugar glider saya.`)}" data-wa="Hai ${esc(D.brandName)}! Saya butuh rekomendasi produk untuk sugar glider saya." data-track="cta_bottom" target="_blank" rel="noopener">${ICON.wa} Konsultasi Gratis</a>
+        <div><p class="eyebrow">Konsultasi gratis</p><h2>Bingung pilih yang pas untuk si kecil?</h2><p>Ceritakan kebutuhan sugar glider kamu — admin bantu rekomendasikan produk yang tepat.</p></div>
+        <a class="btn btn-light btn-lg" href="${waLink(`Hai ${D.brandName}! Saya butuh rekomendasi produk untuk sugar glider saya.`)}" data-wa="Hai ${esc(D.brandName)}! Saya butuh rekomendasi produk untuk sugar glider saya." data-track="cta_bottom" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> Chat via WhatsApp</a>
       </div>
     </div>
   </section>
@@ -566,7 +567,7 @@ function buildProduct(p) {
     const desc = firstSentence(p.description, 150);
     const related = sortDefault(products.filter(o => o !== p && !o.soldOut))
         .sort((a, b) => (b.category === p.category ? 1 : 0) - (a.category === p.category ? 1 : 0)).slice(0, 8);
-    const paragraphs = String(p.description).replace(/\\\s/g, ' ').split(/\n\s*\n/).map(par => par.trim()).filter(Boolean)
+    const paragraphs = String(p.description).replace(/\\\s/g, ' ').replace(DECOR_EMOJI, '').replace(/[ \t]+([.!])/g, '$1').replace(/\.{2,}/g, '.').replace(/([!?])\./g, '$1').split(/\n\s*\n/).map(par => par.trim()).filter(Boolean)
         .map(par => `<p>${esc(par).replace(/\n/g, '<br>')}</p>`).join('\n');
 
     const productLd = {
@@ -606,10 +607,10 @@ ${header()}
       </div>
       ${p.images.length > 1 ? `<div class="gallery-dots" id="gallery-dots">${p.images.map((_, k) => `<button type="button" aria-label="Foto ${k + 1}"${k === 0 ? ' class="is-active"' : ''}></button>`).join('')}</div>
       <div class="thumbs">${p.images.map((im, k) => `<button type="button" data-go="${k}" aria-label="Lihat foto ${k + 1}${im.variant ? ' ' + esc(im.variant) : ''}"${k === 0 ? ' class="is-active"' : ''}>${img(im.src, { alt: '', small: 'w400', large: 'w400', sizes: '72px' })}</button>`).join('')}</div>` : ''}
-      ${p.soldOut ? '<span class="badge badge-soldout badge-lg">Stok Habis</span>' : p.bestSeller ? '<span class="badge badge-best badge-lg">Best Seller</span>' : ''}
+      ${p.soldOut ? '<span class="badge badge-soldout badge-lg">Stok habis</span>' : p.bestSeller ? '<span class="badge badge-best badge-lg">Best Seller</span>' : ''}
     </div>
     <div class="pdp-info">
-      <a class="card-cat" href="/kategori/${p.cat.slug}/">${p.cat.icon || ''} ${esc(p.cat.label)}</a>
+      <a class="pdp-cat" href="/kategori/${p.cat.slug}/">${esc(p.cat.label)}</a>
       <h1>${esc(p.name)}</h1>
       <p class="pdp-price${p.price ? '' : ' price-ask'}">${esc(p.priceText)}</p>
       ${p.variants.length ? `<div class="variants">
@@ -617,8 +618,8 @@ ${header()}
         <div class="variant-list">${p.images.map((im, k) => im.variant ? `<button type="button" class="variant${k === 0 ? ' is-active' : ''}" data-go="${k}" data-variant="${esc(im.variant)}"><span style="background:${COLOR_HEX[im.variant] || '#E2E8F0'}"></span>${esc(im.variant)}</button>` : '').join('')}</div>
       </div>` : ''}
       <div class="pdp-actions">
-        <a class="btn btn-wa btn-lg btn-block" id="order-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="pdp_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener">${ICON.wa} ${p.soldOut ? 'Tanya Restock via WhatsApp' : 'Pesan via WhatsApp'}</a>
-        <a class="btn btn-ghost btn-block" href="${waLink(`Hai ${D.brandName}! Saya mau tanya dulu soal ${p.name}.`)}" data-wa="Hai ${esc(D.brandName)}! Saya mau tanya dulu soal ${esc(p.name)}." data-track="pdp_ask" target="_blank" rel="noopener">Tanya dulu ke admin</a>
+        <a class="btn btn-dark btn-lg btn-block" id="order-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="pdp_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> ${p.soldOut ? 'Tanya restock via WhatsApp' : 'Pesan via WhatsApp'}</a>
+        <a class="btn btn-outline btn-block" href="${waLink(`Hai ${D.brandName}! Saya mau tanya dulu soal ${p.name}.`)}" data-wa="Hai ${esc(D.brandName)}! Saya mau tanya dulu soal ${esc(p.name)}." data-track="pdp_ask" target="_blank" rel="noopener">Tanya dulu ke admin</a>
       </div>
       <ul class="pdp-perks">
         <li>${ICON.truck} Gratis ongkir area tertentu di ${esc(D.city)} · JNE/J&amp;T ke seluruh Indonesia</li>
@@ -633,13 +634,13 @@ ${header()}
   </div>
 
   ${related.length ? `<section class="section section-tight" aria-labelledby="rel-title">
-    <div class="section-head row"><h2 id="rel-title">Produk Lainnya</h2><a class="link-more" href="/kategori/${p.cat.slug}/">Lihat ${esc(p.cat.label)} ${ICON.arrow}</a></div>
+    ${sectionHead('Rekomendasi', 'Mungkin kamu <em>juga suka</em>', 'rel-title', `<a class="link-more" href="/kategori/${p.cat.slug}/">${esc(p.cat.label)} ${ICON.arrow}</a>`)}
     <div class="rail">${related.map(o => productCard(o)).join('\n')}</div>
   </section>` : ''}
 </main>
 <div class="buybar">
   <div><small>${esc(p.name)}</small><strong class="${p.price ? '' : 'price-ask'}">${esc(p.priceText)}</strong></div>
-  <a class="btn btn-wa" id="buybar-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="buybar_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener">${ICON.wa} ${p.soldOut ? 'Tanya Restock' : 'Pesan Sekarang'}</a>
+  <a class="btn btn-dark" id="buybar-btn" href="${waLink(orderMsg(p.variants[0]))}" data-wa="${esc(orderMsg(p.variants[0]))}" data-wa-base="${esc(orderMsg('{v}'))}" data-track="buybar_order" data-product="${esc(p.name)}" data-value="${p.price}" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> ${p.soldOut ? 'Tanya restock' : 'Pesan sekarang'}</a>
 </div>
 ${footer()}
 ${tail({ floatingWa: false })}`;
@@ -669,10 +670,11 @@ ${header('kategori')}
   <section class="cat-hero">
     <div class="container">
       ${breadcrumbs(crumbs)}
-      <h1>${c.icon || ''} ${esc(c.title)}</h1>
+      <p class="eyebrow">Kategori</p>
+      <h1>${esc(c.title)}</h1>
       <p>${esc(c.intro)}</p>
       <div class="chips chips-links">
-        ${categories.map(o => `<a class="chip${o === c ? ' is-active' : ''}" href="/kategori/${o.slug}/"${o === c ? ' aria-current="page"' : ''}>${o.icon || ''} ${esc(o.label)}</a>`).join('\n        ')}
+        ${categories.map(o => `<a class="chip${o === c ? ' is-active' : ''}" href="/kategori/${o.slug}/"${o === c ? ' aria-current="page"' : ''}>${esc(o.label)}</a>`).join('\n        ')}
       </div>
     </div>
   </section>
@@ -702,8 +704,8 @@ ${header()}
   <img src="${imgMap[D.logo].w192}" width="120" height="120" alt="">
   <h1>Ups, halaman tidak ditemukan</h1>
   <p>Mungkin produknya sudah pindah alamat. Yuk lihat katalog terbaru kami.</p>
-  <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/#katalog">Lihat Katalog</a>
-  <a class="btn btn-wa btn-lg" href="${waLink(`Hai ${D.brandName}!`)}" data-wa="Hai ${esc(D.brandName)}!" data-track="404" target="_blank" rel="noopener">${ICON.wa} Chat Admin</a></div>
+  <div class="hero-cta"><a class="btn btn-dark btn-lg" href="/#katalog">Lihat katalog</a>
+  <a class="btn btn-outline btn-lg" href="${waLink(`Hai ${D.brandName}!`)}" data-wa="Hai ${esc(D.brandName)}!" data-track="404" target="_blank" rel="noopener"><span class="wa-glyph">${ICON.wa}</span> Tanya admin</a></div>
 </main>
 ${footer()}
 ${tail()}`;

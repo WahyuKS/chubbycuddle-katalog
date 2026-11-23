@@ -128,6 +128,19 @@
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) close(); });
     }
 
+    /* ---------- Animasi halus saat elemen masuk layar ---------- */
+    if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+            });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.section .section-head, .cat-card, .trust, .steps, .free-ship, .about, .cta-card, .testi')
+            .forEach(function (el) {
+                if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('reveal'); io.observe(el); }
+            });
+    }
+
     /* ---------- Halaman produk: galeri + pilihan warna ---------- */
     var gallery = document.getElementById('gallery');
     if (gallery) {
