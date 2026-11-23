@@ -58,7 +58,7 @@ const CC_DATA = {
           title: "Makanan & Nutrisi Sugar Glider",
           intro: "Makanan dan nutrisi pendukung untuk sugar glider." },
         { key: "Merchandise", label: "Merchandise", icon: "🎁", slug: "merchandise-manik", image: "assets/Penakmanik.jpeg",
-          title: "Merchandise Manik Handmade ChubbyCuddle",
+          title: "Merchandise Manik Handmade",
           intro: "Pena, cermin, dan sisir dengan hiasan manik-manik handmade. Desainnya unik dan limited — cocok untuk hadiah atau mempercantik meja kamu." }
     ],
 

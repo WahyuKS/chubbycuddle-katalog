@@ -39,7 +39,14 @@ const firstSentence = (s, max = 155) => {
     if (t.length <= max) return t;
     return t.slice(0, max).replace(/\s+\S*$/, '') + '…';
 };
-const abs = p => SITE + '/' + String(p).replace(/^\//, '');
+// meta description maks ~158 karakter agar tidak terpotong di Google
+const metaDesc = (text, suffix = '', max = 158) => {
+    const room = max - suffix.length;
+    let t = plain(text).replace(/\s+/g, ' ').trim();
+    if (t.length > room) t = t.slice(0, room - 1).replace(/\s+\S*$/, '').replace(/[\s.,;:!?–-]+$/, '') + '…';
+    return (t + suffix).trim();
+};
+const abs = p =>SITE + '/' + String(p).replace(/^\//, '');
 const waLink = msg => `https://wa.me/${D.whatsappNumber}?text=${encodeURIComponent(msg)}`;
 function write(rel, content) {
     const f = path.join(ROOT, rel);
@@ -406,8 +413,8 @@ function buildHome() {
     }).join('\n');
 
     const html = head({
-        title: `${D.brandName} — Toko Perlengkapan Sugar Glider ${D.city} | Kirim ke Seluruh Indonesia`,
-        description: `${D.brandName}: toko perlengkapan sugar glider di ${D.city}. Pet cargo, tas travel, mangkuk keramik, botol minum, spet & mainan mulai ${rupiah(minPrice)}. Gratis ongkir area tertentu di ${D.city}, kirim ke seluruh Indonesia.`,
+        title: `${D.brandName} — Toko Perlengkapan Sugar Glider ${D.city}`,
+        description: metaDesc(`${D.brandName}: pet cargo, tas travel, mangkuk keramik, spet & mainan sugar glider mulai ${rupiah(minPrice)}.`, ` Gratis ongkir area ${D.city}, kirim se-Indonesia.`),
         canonical: SITE + '/',
         ogImage: SITE + hero.og,
         jsonld,
@@ -594,7 +601,7 @@ function buildProduct(p) {
 
     const html = head({
         title: `${p.name}${p.price ? ' – ' + p.priceText : ''} | ${D.brandName}`,
-        description: `${desc} Beli di ${D.brandName} ${D.city}, kirim ke seluruh Indonesia.`.slice(0, 300),
+        description: metaDesc(plain(p.description.split('\n')[0]).replace(DECOR_EMOJI, ''), ` ${p.price ? p.priceText + ' di' : 'Di'} ${D.brandName}.`),
         canonical: SITE + p.url,
         ogImage: SITE + (cover && cover.og ? cover.og : '/' + p.images[0].src),
         ogType: 'product',
@@ -660,7 +667,7 @@ function buildCategory(c) {
     const ci = c.image ? imgMap[c.image] : null;
     const html = head({
         title: `${c.title} | ${D.brandName}`,
-        description: `${firstSentence(c.intro, 140)} ${list.length} produk di ${D.brandName} ${D.city}.`.slice(0, 300),
+        description: metaDesc(c.intro, ` ${list.length} produk di ${D.brandName}.`),
         canonical: SITE + url,
         ogImage: SITE + (ci && ci.og ? ci.og : imgMap[D.heroImage].og),
         jsonld: [
