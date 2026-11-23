@@ -940,6 +940,66 @@ ${urls.map(u => `  <url>\n    <loc>${SITE}${u}</loc>${imgsFor(u)}\n  </url>`).jo
     write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 }
 
+/* ---------------------------------------------------------- feed produk
+ * feed.xml = format RSS 2.0 + namespace g: (Google Merchant Center).
+ * Format yang sama juga diterima Meta Commerce Manager (katalog iklan FB/IG).
+ * - Produk tanpa harga ("Tanya Admin") tidak dimasukkan (Google wajib ada harga).
+ * - Produk dengan beberapa warna -> 1 item per warna, dikelompokkan dengan item_group_id.
+ */
+const GOOGLE_CATEGORY = 'Animals & Pet Supplies > Pet Supplies > Small Animal Supplies';
+function buildFeed() {
+    const x = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[c]));
+    const imgUrl = src => SITE + '/' + String(src).replace(/^\//, '').split('/').map(encodeURIComponent).join('/');
+    const descOf = p => plain(String(p.description).replace(/\\\s/g, ' ').replace(DECOR_EMOJI, '')).replace(/\s+/g, ' ').trim().slice(0, 4900);
+    const items = [];
+    for (const p of sortDefault(products)) {
+        if (!p.price) continue;
+        const base = {
+            title: p.name, description: descOf(p), product_type: `Sugar Glider & Hewan Kecil > ${p.cat.label}`,
+            price: `${p.price}.00 IDR`, availability: p.soldOut ? 'out_of_stock' : 'in_stock',
+            brand: D.brandName, mpn: p.sku
+        };
+        const variants = p.images.filter(im => im.variant);
+        if (variants.length > 1) {
+            variants.forEach(v => items.push({
+                ...base, id: `${p.sku}-${slugify(v.variant)}`.toUpperCase(), item_group_id: p.sku,
+                title: `${p.name} - ${v.variant}`, color: v.variant,
+                link: `${SITE}${p.url}?warna=${encodeURIComponent(v.variant)}`,
+                image: imgUrl(v.src), extra: p.images.filter(o => o !== v).slice(0, 10).map(o => imgUrl(o.src))
+            }));
+        } else {
+            items.push({ ...base, id: p.sku, link: SITE + p.url, image: imgUrl(p.images[0].src),
+                extra: p.images.slice(1, 11).map(o => imgUrl(o.src)), color: variants[0] ? variants[0].variant : '' });
+        }
+    }
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+<channel>
+<title>${x(D.brandName)} — Katalog Produk</title>
+<link>${SITE}/</link>
+<description>${x(`Perlengkapan sugar glider & hewan kecil dari ${D.brandName}, ${D.city}.`)}</description>
+${items.map(i => `<item>
+  <g:id>${x(i.id)}</g:id>
+  <g:title>${x(i.title)}</g:title>
+  <g:description>${x(i.description)}</g:description>
+  <g:link>${x(i.link)}</g:link>
+  <g:image_link>${x(i.image)}</g:image_link>
+${i.extra.map(e => `  <g:additional_image_link>${x(e)}</g:additional_image_link>\n`).join('')}  <g:availability>${i.availability}</g:availability>
+  <g:price>${i.price}</g:price>
+  <g:condition>new</g:condition>
+  <g:brand>${x(i.brand)}</g:brand>
+  <g:mpn>${x(i.mpn)}</g:mpn>
+  <g:identifier_exists>no</g:identifier_exists>
+  <g:google_product_category>${x(GOOGLE_CATEGORY)}</g:google_product_category>
+  <g:product_type>${x(i.product_type)}</g:product_type>
+${i.item_group_id ? `  <g:item_group_id>${x(i.item_group_id)}</g:item_group_id>\n` : ''}${i.color ? `  <g:color>${x(i.color)}</g:color>\n` : ''}</item>`).join('\n')}
+</channel>
+</rss>
+`;
+    write('feed.xml', xml);
+    return items.length;
+}
+
 function cleanStale() {
     // hapus halaman produk/kategori yang sudah tidak ada di data.js
     for (const [dir, valid] of [['produk', products.map(p => p.slug)], ['kategori', categories.map(c => c.slug)], ['panduan', ['index.html', ...GUIDES.map(g => g.slug)]]]) {
@@ -960,5 +1020,6 @@ function cleanStale() {
     buildGuideIndex();
     build404();
     buildSitemap();
-    console.log(`✓ Selesai: 1 beranda, ${products.length} produk, ${categories.length} kategori, ${GUIDES.length} panduan, sitemap.xml`);
+    const feedCount = buildFeed();
+    console.log(`✓ Selesai: 1 beranda, ${products.length} produk, ${categories.length} kategori, ${GUIDES.length} panduan, sitemap.xml, feed.xml (${feedCount} item)`);
 })().catch(e => { console.error(e); process.exit(1); });

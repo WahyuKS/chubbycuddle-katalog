@@ -201,6 +201,22 @@
             b.addEventListener('click', function () { goTo(parseInt(b.getAttribute('data-go'), 10)); });
         });
 
+        // Pilih warna otomatis dari link (?warna=Hijau) — dipakai feed Google/Meta
+        try {
+            var want = (new URLSearchParams(location.search).get('warna') || '').toLowerCase();
+            if (want) {
+                for (var k = 0; k < slides.length; k++) {
+                    if ((slides[k].getAttribute('data-variant') || '').toLowerCase() === want) {
+                        var idx = k;
+                        var jump = function () { gallery.scrollLeft = slides[idx].offsetLeft - gallery.offsetLeft; setActive(idx); };
+                        jump();
+                        window.addEventListener('load', jump);
+                        break;
+                    }
+                }
+            }
+        } catch (e) {}
+
         var body = document.body;
         var value = parseInt(body.getAttribute('data-value') || '0', 10);
         track('ViewContent', {

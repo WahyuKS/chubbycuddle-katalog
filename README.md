@@ -26,6 +26,14 @@ Artikel ada di **`panduan.js`** dan jadi halaman `/panduan/<slug>/`. Setiap arti
 Untuk menambah artikel, salin satu blok artikel di `panduan.js`, ganti isinya, lalu push.
 Link di dalam teks: `[[produk:slug|teks]]`, `[[kategori:slug|teks]]`, `[[panduan:slug|teks]]`.
 
+## Feed produk (Google Merchant Center & katalog Meta)
+
+`https://chubbycuddle.my.id/feed.xml` dibuat otomatis oleh build dari `data.js`.
+- Produk tanpa harga ("TANYA ADMIN") tidak masuk feed.
+- Produk dengan beberapa warna masuk sebagai beberapa item (1 per warna) dengan link `?warna=...`.
+- Daftarkan URL feed ini di Google Merchant Center (Products → Feeds → Scheduled fetch, harian)
+  dan di Meta Commerce Manager (Catalog → Data sources → Data feed → URL).
+
 ## Struktur
 
 | File / folder | Isi |
